@@ -1,0 +1,2 @@
+Add -pg to gcc compiler flags
+Run gprof cmake-build-debug/RaySplay | gprof2dot.py | dot -Tpng -o profile_results.png
