@@ -18,4 +18,5 @@ public:
   //    cornerA->cornerB being the beta axis
   //    cornerA->cornerC being the gamma axis
   virtual Vector3D getNormal(float beta, float gamma) const = 0;
+  virtual Vector2D getTexCoord(float beta, float gamma) const = 0;
 };

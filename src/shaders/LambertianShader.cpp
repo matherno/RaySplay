@@ -14,16 +14,21 @@ LambertianShader::LambertianShader(float r, float g, float b) {
 LambertianShader::LambertianShader(const Vector3D& diffuseColour) : diffuseColour(diffuseColour) {
 }
 
+LambertianShader::LambertianShader(TexturePtr diffuseTexture) : diffuseTexture(diffuseTexture) {
+
+}
+
 Vector3D LambertianShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
   Vector3D finalColour(0);
   for(LightSourcePtr light : sceneDef->lights){
     if(!light->isPointInShadow(surfaceInfo, sceneDef)){
+      Vector3D diffuse = getDiffuseColour(surfaceInfo);
       float lightFactor = 1;
       if(!light->isAmbient()){
         lightFactor = mathernogl::dotProduct(surfaceInfo->normal, light->lightDirectionAtPoint(surfaceInfo, sceneDef));
       }
       if(lightFactor > 0){
-        finalColour += diffuseColour * (light->lightIntensityAtPoint(surfaceInfo, sceneDef) * lightFactor);
+        finalColour += diffuse * (light->lightIntensityAtPoint(surfaceInfo, sceneDef) * lightFactor);
       }
     }
   }
@@ -37,3 +42,16 @@ Vector3D LambertianShader::getDiffuseColour() const {
 void LambertianShader::setDiffuseColour(const Vector3D& diffuseColour) {
   this->diffuseColour = diffuseColour;
 }
+
+void LambertianShader::setDiffuseTexture(TexturePtr diffuseTexture) {
+  this->diffuseTexture = diffuseTexture;
+}
+
+Vector3D LambertianShader::getDiffuseColour(const SurfaceInfo* surfaceInfo) const {
+  if (diffuseTexture)
+    return diffuseTexture->getColour(surfaceInfo->texCoord);
+  else
+    return diffuseColour;
+}
+
+

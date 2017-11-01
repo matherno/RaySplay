@@ -42,6 +42,14 @@ public:
     }
     return normal;
   }
+
+  virtual Vector2D getTexCoord(float beta, float gamma) const override {
+    Vector2D texCoord(0, 0);
+    texCoord += mesh->texCoords[vertIndexA] * (1 - beta - gamma);
+    texCoord += mesh->texCoords[vertIndexB] * beta;
+    texCoord += mesh->texCoords[vertIndexC] * gamma;
+    return texCoord;
+  }
 };
 
 
@@ -54,6 +62,7 @@ Mesh::Mesh() {
 
 Mesh::Mesh(const std::string objFilePath, bool justFirstObject) {
   mathernogl::loadObj(objFilePath, &indices, &vertices, &normals, &texCoords, justFirstObject);
+  mathernogl::logInfo("Loaded Mesh: '" + objFilePath + "'");
 }
 
 bool Mesh::init() {

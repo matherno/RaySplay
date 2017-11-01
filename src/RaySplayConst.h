@@ -13,3 +13,4 @@
 
 typedef mathernogl::Vector3D Vector3D;
 typedef mathernogl::Vector2D Vector2D;
+typedef std::string string;

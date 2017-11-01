@@ -21,12 +21,14 @@
 #include "SampleGenerator.h"
 #include "Camera.h"
 #include "AccelerationStructure.h"
+#include "ResourceManager.h"
 
 class Scene {
 private:
   ViewDef viewDef;
   SceneDef sceneDef;
   std::shared_ptr<Camera> camera;
+  ResourceManager resourceManager;
 
 public:
   Scene();

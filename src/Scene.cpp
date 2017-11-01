@@ -248,7 +248,6 @@ void Scene::build() {
       instance.reset(cubeRef);
       grid->push_back(instance);
     }
-
   }
 #endif
 

@@ -51,6 +51,7 @@ bool PrimitiveTriangleBase::hitTest(const Ray* ray, float* hitTValue, SurfaceInf
     *hitTValue = tValue;
     if(surfaceInfo){
       surfaceInfo->normal = getNormal(beta, gamma);
+      surfaceInfo->texCoord = getTexCoord(beta, gamma);
       surfaceInfo->position = ray->getPosition(tValue);
       surfaceInfo->material = material;
     }
