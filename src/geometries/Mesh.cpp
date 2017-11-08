@@ -31,8 +31,8 @@ public:
 
   virtual Vector3D getNormal(float beta, float gamma) const override {
     Vector3D normal(0, 0, 0);
-    if(mesh->smoothShadingEnabled()) {
-      normal += mesh->normals[vertIndexA] * (1 - beta - gamma);
+    if(mesh->smoothShadingEnabled() && mesh->normals.size() > 0) {
+      normal += mesh->normals[vertIndexA] * (1.0f - beta - gamma);
       normal += mesh->normals[vertIndexB] * beta;
       normal += mesh->normals[vertIndexC] * gamma;
       normal.makeUniform();
@@ -45,9 +45,11 @@ public:
 
   virtual Vector2D getTexCoord(float beta, float gamma) const override {
     Vector2D texCoord(0, 0);
-    texCoord += mesh->texCoords[vertIndexA] * (1 - beta - gamma);
-    texCoord += mesh->texCoords[vertIndexB] * beta;
-    texCoord += mesh->texCoords[vertIndexC] * gamma;
+    if (mesh->texCoords.size() > 0) {
+      texCoord += mesh->texCoords[vertIndexA] * (1.0f - beta - gamma);
+      texCoord += mesh->texCoords[vertIndexB] * beta;
+      texCoord += mesh->texCoords[vertIndexC] * gamma;
+    }
     return texCoord;
   }
 };

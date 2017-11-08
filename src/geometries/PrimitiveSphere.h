@@ -24,6 +24,7 @@ public:
   const mathernogl::Vector3D& getCentre() const;
   float getRadius() const;
   float getRadiusSquared() const;
+  Vector2D getTextureCoord(const Vector3D& position) const;
 
   virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
   virtual bool hitTest(const Ray* ray, float* hitTValue) const override;

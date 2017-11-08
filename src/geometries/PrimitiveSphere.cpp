@@ -41,6 +41,21 @@ float PrimitiveSphere::getRadiusSquared() const {
   return radiusSquared;
 }
 
+const double twoPi = 2 * M_PI;
+
+Vector2D PrimitiveSphere::getTextureCoord(const Vector3D& position) const {
+  const Vector3D spherePos = (position - centre) / radius;
+  Vector2D uv;
+  double horizontalAngle = atan2(spherePos.x, spherePos.z);
+  if (horizontalAngle < 0.0)
+    horizontalAngle += twoPi;
+  double verticalAngle = acos(spherePos.y);
+  uv.x = (float) (horizontalAngle / twoPi);
+  uv.y = (float) (1.0 - (verticalAngle / M_PI));
+  return uv;
+}
+
+
 bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
   using namespace mathernogl;
   Vector3D originToCentre = ray->origin - centre;
@@ -60,10 +75,10 @@ bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* sur
         surfaceInfo->position = ray->getPosition(tValueResult);
         surfaceInfo->normal = (surfaceInfo->position - centre) / radius;
         surfaceInfo->material = material;
+        surfaceInfo->texCoord = getTextureCoord(surfaceInfo->position);
       }
       return true;
     }
-
 
     tValueResult = (-b + sqrtPart)/denominator;
     if(tValueResult > EPSILON){
@@ -72,6 +87,7 @@ bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* sur
         surfaceInfo->position = ray->getPosition(tValueResult);
         surfaceInfo->normal = (surfaceInfo->position - centre) / radius;
         surfaceInfo->material = material;
+        surfaceInfo->texCoord = getTextureCoord(surfaceInfo->position);
       }
       return true;
     }
@@ -86,6 +102,5 @@ bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue) const {
 void PrimitiveSphere::constructBoundingBox() {
   boundingBox = std::make_shared<BoundingBox>(centre - radius, centre + radius);
 }
-
 
 

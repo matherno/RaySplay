@@ -14,3 +14,5 @@
 typedef mathernogl::Vector3D Vector3D;
 typedef mathernogl::Vector2D Vector2D;
 typedef std::string string;
+
+#define ERROR_COLOUR Vector3D(0.9, 0.0, 0.6)

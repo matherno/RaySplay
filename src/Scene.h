@@ -4,11 +4,11 @@
 #define RS_DEBUG
 #endif
 
-//#define SCENE_A
-#define SCENE_B
-//#define SCENE_C
-//#define SCENE_D
-//#define SCENE_E
+//#define SCENE_A     //  original
+//#define SCENE_B     //  sphere and boxes
+//#define SCENE_C       //  lots of spheres
+//#define SCENE_D     //  random trees
+#define SCENE_E     //  single model (plant pot)
 
 //
 // Created by matherno on 1/08/17.

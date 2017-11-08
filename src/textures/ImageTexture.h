@@ -8,7 +8,7 @@
 
 typedef std::unique_ptr<mathernogl::Image::ColourVector> ColourMapPtr;
 
-class ImageTexture : public Texture{
+class ImageTexture : public Texture {
 protected:
   ColourMapPtr colourMap;
   uint width;
@@ -17,5 +17,6 @@ protected:
 public:
   ImageTexture(ColourMapPtr colourMap, uint width, uint height);
 
+  inline Vector3D getTexelColour(uint col, uint row) const;
   virtual Vector3D getColour(const Vector2D& texCoord) const override;
 };

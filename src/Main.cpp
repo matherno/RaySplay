@@ -70,7 +70,7 @@ int main() {
   std::strftime(buffer,15,"%y%m%d%H%M%S",timeinfo);
   std::string timeFormatted = buffer;
 
-  imageOutputFile.saveCurrentStateToFile("image_stash/Output_" + timeFormatted + ".png");
+  imageOutputFile.saveCurrentStateToFile("image_stash/output/Output_" + timeFormatted + ".png");
 
   return 0;
 }

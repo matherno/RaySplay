@@ -5,6 +5,7 @@
 
 
 #include <Shader.h>
+#include <Texture.h>
 
 class PhongShader : public Shader {
 private:
@@ -12,18 +13,24 @@ private:
   Vector3D specularColour;
   float specularExp = 25;
   bool blinnPhong = true;
+  TexturePtr diffuseTexture;
 
 public:
   PhongShader();
   PhongShader(const Vector3D& diffuseColour, const Vector3D& specularColour, float specularExp, bool blinnPhong = true);
+  PhongShader(TexturePtr diffuseTexture, const Vector3D& specularColour, float specularExp, bool blinnPhong = true);
 
   Vector3D getDiffuseColour() const;
   Vector3D getSpecularColour() const;
   float getSpecularExp() const;
 
   void setDiffuseColour(const Vector3D& diffuseColour);
+  void setDiffuseTexture(TexturePtr diffuseTexture);
   void setSpecularColour(const Vector3D& specularColour);
   void setSpecularExp(float specularExp);
 
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
+
+protected:
+  Vector3D getDiffuseColour(const SurfaceInfo* surfaceInfo) const;
 };

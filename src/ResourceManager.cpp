@@ -5,7 +5,7 @@
 #include <textures/ImageTexture.h>
 #include "ResourceManager.h"
 
-TexturePtr ResourceManager::loadImageTexture(const string& filePath) {
+TexturePtr ResourceManager::loadImageTexture(const string& filePath, mathernogl::TextureFiltering texFiltering) {
   using namespace mathernogl;
   auto textureMapIter = loadedTextures.find(filePath);
   if (textureMapIter == loadedTextures.end()) {
@@ -29,6 +29,7 @@ TexturePtr ResourceManager::loadImageTexture(const string& filePath) {
 
     if (texture) {
       TexturePtr texturePtr = TexturePtr(texture);
+      texturePtr->setTextureFiltering(texFiltering);
       loadedTextures[filePath] = texturePtr;
       mathernogl::logInfo("Loaded Image Texture: '" + filePath + "'");
       return texturePtr;

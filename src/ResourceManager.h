@@ -17,7 +17,7 @@ public:
    *  Loads the image at the given file path into the returned texture
    *  Will only load a given image once, caching each image loaded by file path
    */
-  TexturePtr loadImageTexture(const string& filePath);
+  TexturePtr loadImageTexture(const string& filePath, mathernogl::TextureFiltering texFiltering = mathernogl::NEAREST);
 
   /*
    *  Clears all the cached data in this Resource Manager

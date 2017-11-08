@@ -21,6 +21,7 @@
 #include <ctime>
 #include <chrono>
 #include <geometries/GeometryReference.h>
+#include <shaders/NormalsTestShader.h>
 
 #ifdef RS_DEBUG
 #define NUM_UPDATES 8
@@ -55,7 +56,7 @@ void Scene::build() {
 #ifdef RS_DEBUG
   ambientLightSource.reset(new AmbientLight(0.02));
 #else
-  ambientLightSource.reset(new AmbientOcclusion(0.02, 10, 3));
+  ambientLightSource.reset(new AmbientOcclusion(0.03, 10, 3));
 #endif
   sceneDef.lights.push_back(ambientLightSource);
 
@@ -78,7 +79,10 @@ void Scene::build() {
 #endif
 
 #ifdef SCENE_E
-  light.reset(new PointLight(Vector3D(0.6), Vector3D(5, 10, -12), 25, 3));
+  light.reset(new PointLight(Vector3D(0.7), Vector3D(5, 10, -12), 25, 3));
+  LightSourcePtr light2;
+  light2.reset(new PointLight(Vector3D(0.4), Vector3D(-5, 6, -16), 25, 3));
+  sceneDef.lights.push_back(light2);
 #endif
 
   sceneDef.lights.push_back(light);
@@ -195,10 +199,13 @@ void Scene::build() {
     grid->push_back(reflBox);
   }
 
-  {   //  major red sphere
+  {   //  major sphere
     GeometryPtr majSphere;
     majSphere.reset(new PrimitiveSphere(Vector3D(-1, 1.5, 5), 1.5));
-    majSphere->setMaterial(ShaderPtr(new PhongShader(Vector3D(0.5, 0.1, 0.1), Vector3D(0.3), 10)));
+    TexturePtr texture = resourceManager.loadImageTexture("resources/mercator.jpg");
+    texture->setTextureFiltering(mathernogl::LINEAR);
+    majSphere->setMaterial(ShaderPtr(new PhongShader(texture, Vector3D(0.3), 10)));
+//    majSphere->setMaterial(ShaderPtr(new LambertianShader(resourceManager.loadImageTexture("resources/mercator.jpg"))));
     grid->push_back(majSphere);
   }
 
@@ -267,61 +274,76 @@ void Scene::build() {
 #endif
 
 #ifdef SCENE_E
-  GeometryPtr groundBox;
-  groundBox.reset(new PrimitiveBoxAA(Vector3D(-30, -10, -100), Vector3D(30, 0, 20)));
-  groundBox->setMaterial(std::make_shared<LambertianShader>(0.2, 0.5, 0.1));
-  sceneDef.geometries.push_back(groundBox);
-
-//  Mesh* pillarMesh = new Mesh("resources/Pillar.obj");
-//  pillarMesh->setSmoothShading(true);
-//  pillarMesh->ensureNormalsNormalised();
-//  pillarMesh->setMaterial(std::make_shared<LambertianShader>(0.5, 0.4, 0.4));
-//  pillarMesh->scaleToSize(Vector3D(5));
-//  GeometryPtr pillarMeshPtr(pillarMesh);
-//
-//  {
-//    GeometryReference* pillar = new GeometryReference(pillarMeshPtr);
-//    mathernogl::Transform transform;
-////    transform.scale(1);
-//    transform.rotate(0, 1, 0, 35);
-//    transform.translate(0, 0, -15);
-//    pillar->setTransform(transform);
-//    grid->push_back(GeometryPtr(pillar));
-//  }
-
-  Mesh* potMesh = new Mesh("resources/PotFernPot.obj");
-  potMesh->setSmoothShading(true);
-  potMesh->ensureNormalsNormalised();
-  potMesh->setMaterial(std::make_shared<PhongShader>(Vector3D(0.1, 0.1, 0.08), Vector3D(0.2, 0.1, 0.1), 5));
-//  potMesh->scaleToSize(Vector3D(5));
-
-  Mesh* leavesMesh = new Mesh("resources/PotFernLeaves.obj");
-  leavesMesh->setSmoothShading(true);
-  leavesMesh->ensureNormalsNormalised();
-  leavesMesh->setMaterial(std::make_shared<PhongShader>(Vector3D(0.1, 0.4, 0.05), Vector3D(0.02, 0.05, 0), 1));
-//  leavesMesh->scaleToSize(Vector3D(5));
-
-  Mesh* trunkMesh = new Mesh("resources/PotFernTrunk.obj");
-  trunkMesh->setSmoothShading(true);
-  trunkMesh->ensureNormalsNormalised();
-  trunkMesh->setMaterial(std::make_shared<PhongShader>(Vector3D(0.25, 0.2, 0.05), Vector3D(0.05, 0.01, 0), 1));
-//  trunkMesh->scaleToSize(Vector3D(5));
-
-  GeometrySet* potFernMesh = new GeometrySet();
-  potFernMesh->push_back(GeometryPtr(potMesh));
-  potFernMesh->push_back(GeometryPtr(leavesMesh));
-  potFernMesh->push_back(GeometryPtr(trunkMesh));
-  GeometryPtr potFernMeshPtr(potFernMesh);
+//  GeometryPtr groundBox;
+//  groundBox.reset(new PrimitiveBoxAA(Vector3D(-30, -10, -100), Vector3D(30, 0, 20)));
+//  groundBox->setMaterial(std::make_shared<LambertianShader>(0.2, 0.2, 0.1));
+//  sceneDef.geometries.push_back(groundBox);
 
   {
-    GeometryReference* potFern = new GeometryReference(potFernMeshPtr);
+    Mesh* mesh = new Mesh("resources/Square.obj");
+    mesh->setSmoothShading(true);
+    mesh->ensureNormalsNormalised();
+    mesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/wood_floor.jpg"), Vector3D(1), 250));
+
+    GeometryReference* meshRef = new GeometryReference(GeometryPtr(mesh));
     mathernogl::Transform transform;
-    transform.scale(0.7);
-    transform.rotate(0, 1, 0, 35);
-    transform.translate(1, 0, -15);
-    potFern->setTransform(transform);
-    grid->push_back(GeometryPtr(potFern));
+    transform.rotate(1, 0, 0, -90);
+    transform.rotate(0, 1, 0, 36);
+    transform.scale(20);
+    transform.translate(0, 0, -30);
+    meshRef->setTransform(transform);
+    grid->push_back(GeometryPtr(meshRef));
   }
+
+  {
+    Mesh* mesh = new Mesh("resources/BowlingSet.obj");
+    mesh->setSmoothShading(true);
+    mesh->ensureNormalsNormalised();
+    mesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/bs_diff.jpg"), Vector3D(1), 50));
+
+    GeometryReference* meshRef = new GeometryReference(GeometryPtr(mesh));
+    mathernogl::Transform transform;
+    transform.scale(1.2);
+    transform.rotate(0, 1, 0, 250);
+    transform.translate(0.75, 0, -15);
+    meshRef->setTransform(transform);
+    grid->push_back(GeometryPtr(meshRef));
+  }
+
+//  Mesh* potMesh = new Mesh("resources/PotFernPot.obj");
+//  potMesh->setSmoothShading(true);
+//  potMesh->ensureNormalsNormalised();
+//  potMesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/PotFernPot.png"), Vector3D(0.2, 0.1, 0.1), 1));
+////  potMesh->scaleToSize(Vector3D(5));
+//
+//  Mesh* leavesMesh = new Mesh("resources/PotFernLeaves.obj");
+//  leavesMesh->setSmoothShading(true);
+//  leavesMesh->ensureNormalsNormalised();
+//  leavesMesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/PotFernLeaves.png"), Vector3D(0.02, 0.05, 0), 1));
+////  leavesMesh->scaleToSize(Vector3D(5));
+//
+//  Mesh* trunkMesh = new Mesh("resources/PotFernTrunk.obj");
+//  trunkMesh->setSmoothShading(true);
+//  trunkMesh->ensureNormalsNormalised();
+//  trunkMesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/PotFernTrunk.png"), Vector3D(0.05, 0.01, 0), 1));
+////  trunkMesh->scaleToSize(Vector3D(5));
+//
+//  GeometrySet* potFernMesh = new GeometrySet();
+//  potFernMesh->push_back(GeometryPtr(potMesh));
+//  potFernMesh->push_back(GeometryPtr(leavesMesh));
+//  potFernMesh->push_back(GeometryPtr(trunkMesh));
+//  GeometryPtr potFernMeshPtr(potFernMesh);
+//
+//  {
+//    GeometryReference* potFern = new GeometryReference(potFernMeshPtr);
+//    mathernogl::Transform transform;
+//    transform.scale(0.7);
+//    transform.rotate(0, 1, 0, 35);
+//    transform.translate(1, 0, -15);
+//    potFern->setTransform(transform);
+//    grid->push_back(GeometryPtr(potFern));
+//  }
+
 #endif
 
 }

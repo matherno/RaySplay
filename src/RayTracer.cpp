@@ -26,7 +26,7 @@ bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::V
         *resultColour = finalSurfaceInfo.material->shadeSurface(ray, &finalSurfaceInfo, sceneDef);
       }
       else {
-        resultColour->set(0.9, 0.0, 0.6);
+        *resultColour = ERROR_COLOUR;
       }
     }
   }

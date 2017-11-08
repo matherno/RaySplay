@@ -20,14 +20,15 @@ LambertianShader::LambertianShader(TexturePtr diffuseTexture) : diffuseTexture(d
 
 Vector3D LambertianShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
   Vector3D finalColour(0);
+  Vector3D diffuse = getDiffuseColour(surfaceInfo);
   for(LightSourcePtr light : sceneDef->lights){
     if(!light->isPointInShadow(surfaceInfo, sceneDef)){
-      Vector3D diffuse = getDiffuseColour(surfaceInfo);
       float lightFactor = 1;
       if(!light->isAmbient()){
         lightFactor = mathernogl::dotProduct(surfaceInfo->normal, light->lightDirectionAtPoint(surfaceInfo, sceneDef));
       }
       if(lightFactor > 0){
+        lightFactor *= lightFactor;
         finalColour += diffuse * (light->lightIntensityAtPoint(surfaceInfo, sceneDef) * lightFactor);
       }
     }
