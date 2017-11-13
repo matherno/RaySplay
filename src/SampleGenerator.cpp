@@ -11,54 +11,51 @@ SampleGenerator::SampleGenerator(int sqrtNumSamples, int numSampleSets)
 }
 
 void SampleGenerator::generateUnitCircleSamples() {
-  if(circleMapSamples.empty()){
-    circleMapSamples.reserve((unsigned long)numSamples * numSampleSets);
+  circleMapSamples.clear();
+  circleMapSamples.reserve((unsigned long)numSamples * numSampleSets);
+  float radius, angle;
+  Vector2D sample;
+  for(int sampleNum = 0; sampleNum < squareMapSamples.size(); ++sampleNum) {
+    sample = squareMapSamples[sampleNum];
+    sample = sample * 2.0f - 1.0f;
 
-    float radius, angle;
-    Vector2D sample;
-    for(int sampleNum = 0; sampleNum < squareMapSamples.size(); ++sampleNum) {
-      sample = squareMapSamples[sampleNum];
-      sample = sample * 2.0f - 1.0f;
-
-      if(sample.x > -sample.y){
-        if(sample.x > sample.y){
-          radius = sample.x;
-          angle = sample.x != 0 ? (sample.y / sample.x) : 0;
-        }
-        else{
-          radius = sample.y;
-          angle = sample.y != 0 ? (2 - sample.x / sample.y) : 2;
-        }
+    if(sample.x > -sample.y){
+      if(sample.x > sample.y){
+        radius = sample.x;
+        angle = sample.x != 0 ? (sample.y / sample.x) : 0;
       }
       else{
-        if(sample.x < sample.y){
-          radius = -sample.x;
-          angle = sample.x != 0 ? (4 + sample.y / sample.x) : 4;
-        }
-        else{
-          radius = -sample.y;
-          angle = sample.y != 0 ? (6 - sample.x / sample.y) : 6;
-        }
+        radius = sample.y;
+        angle = sample.y != 0 ? (2 - sample.x / sample.y) : 2;
       }
-
-      circleMapSamples.emplace_back(radius*cos(angle*M_PI_4), radius*sin(angle*M_PI_4));
     }
+    else{
+      if(sample.x < sample.y){
+        radius = -sample.x;
+        angle = sample.x != 0 ? (4 + sample.y / sample.x) : 4;
+      }
+      else{
+        radius = -sample.y;
+        angle = sample.y != 0 ? (6 - sample.x / sample.y) : 6;
+      }
+    }
+
+    circleMapSamples.emplace_back(radius*cos(angle*M_PI_4), radius*sin(angle*M_PI_4));
   }
 }
 
 void SampleGenerator::generateUnitHemisphereSamples(float distributionExp) {
-  if(hemisphereMapSamples.empty()){
-    hemisphereMapSamples.reserve((unsigned long)numSamples * numSampleSets);
+  hemisphereMapSamples.clear();
+  hemisphereMapSamples.reserve((unsigned long)numSamples * numSampleSets);
 
-    Vector2D sample;
-    for(int sampleNum = 0; sampleNum < squareMapSamples.size(); ++sampleNum) {
-      sample = squareMapSamples[sampleNum];
-      float cosPhi = (float)cos(2.0*M_PI*sample.x);
-      float sinPhi = (float)sin(2.0*M_PI*sample.x);
-      float cosTheta = (float)pow(1.0-sample.y, 1.0/(distributionExp+1.0));
-      float sinTheta = (float)sqrt(1.0 - cosTheta*cosTheta);
-      hemisphereMapSamples.emplace_back(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
-    }
+  Vector2D sample;
+  for(int sampleNum = 0; sampleNum < squareMapSamples.size(); ++sampleNum) {
+    sample = squareMapSamples[sampleNum];
+    float cosPhi = (float)cos(2.0*M_PI*sample.x);
+    float sinPhi = (float)sin(2.0*M_PI*sample.x);
+    float cosTheta = (float)pow(1.0-sample.y, 1.0/(distributionExp+1.0));
+    float sinTheta = (float)sqrt(1.0 - cosTheta*cosTheta);
+    hemisphereMapSamples.emplace_back(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
   }
 }
 

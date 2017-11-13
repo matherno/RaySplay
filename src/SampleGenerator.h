@@ -39,6 +39,7 @@ public:
 
   void generateUnitCircleSamples();
   void generateUnitHemisphereSamples(float distributionExp);
+
   SampleSetPtr getSampleSet(SampleMapType sampleMapType);
   SampleSetPtr getActiveSampleSet(){ return activeSampleSet; };
 

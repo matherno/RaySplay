@@ -195,18 +195,30 @@ void Scene::build() {
   {   //  reflection box
     GeometryPtr reflBox;
     reflBox.reset(new PrimitiveBoxAA(Vector3D(3, 0, 0), Vector3D(6, 5, 16)));
-    reflBox->setMaterial(ShaderPtr(new ReflectionShader(Vector3D(0.2, 0.2, 0.2), Vector3D(0.2, 0.2, 0.2), 1)));
+    ReflectionShader* refl = new ReflectionShader(Vector3D(0.2, 0.2, 0.2), Vector3D(0.2, 0.2, 0.2), 1, Vector3D(1));
+    refl->setFuzziness(0.15);
+    reflBox->setMaterial(ShaderPtr(refl));
     grid->push_back(reflBox);
   }
 
   {   //  major sphere
     GeometryPtr majSphere;
     majSphere.reset(new PrimitiveSphere(Vector3D(-1, 1.5, 5), 1.5));
-    TexturePtr texture = resourceManager.loadImageTexture("resources/mercator.jpg");
-    texture->setTextureFiltering(mathernogl::LINEAR);
-    majSphere->setMaterial(ShaderPtr(new PhongShader(texture, Vector3D(0.3), 10)));
+    ReflectionShader* refl = new ReflectionShader(Vector3D(0.8, 0, 0), Vector3D(0.3), 10, Vector3D(1, 0, 1));
+    refl->setFuzziness(0);
+    majSphere->setMaterial(ShaderPtr(refl));
 //    majSphere->setMaterial(ShaderPtr(new LambertianShader(resourceManager.loadImageTexture("resources/mercator.jpg"))));
     grid->push_back(majSphere);
+  }
+
+  {   //  minor sphere
+    GeometryPtr minSphere;
+    minSphere.reset(new PrimitiveSphere(Vector3D(-6.3, 2, 8.2), 1.0));
+    ReflectionShader* refl = new ReflectionShader(Vector3D(0.7, 0.2, 0), Vector3D(0.3, 0.1, 0.1), 30, Vector3D(0.5));
+    refl->setFuzziness(0.8);
+    minSphere->setMaterial(ShaderPtr(refl));
+//    majSphere->setMaterial(ShaderPtr(new LambertianShader(resourceManager.loadImageTexture("resources/mercator.jpg"))));
+    grid->push_back(minSphere);
   }
 
   {   //  long grey thing
@@ -238,7 +250,7 @@ void Scene::build() {
       transform.translate(-5, 0, 10);
       GeometryReference* cubeRef = new GeometryReference(cubey);
       cubeRef->setTransform(transform);
-      cubeRef->setMaterial(std::make_shared<LambertianShader>(0.7, 0.3, 0.1));
+      cubeRef->setMaterial(ShaderPtr(new PhongShader(Vector3D(0.7, 0.3, 0.1), Vector3D(0), 0)));
       GeometryPtr instance;
       instance.reset(cubeRef);
       grid->push_back(instance);
@@ -283,7 +295,9 @@ void Scene::build() {
     Mesh* mesh = new Mesh("resources/Square.obj");
     mesh->setSmoothShading(true);
     mesh->ensureNormalsNormalised();
-    mesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/wood_floor.jpg"), Vector3D(1), 250));
+    ReflectionShader* refl = new ReflectionShader(resourceManager.loadImageTexture("resources/wood_floor.jpg"), Vector3D(1), 250, Vector3D(0.6, 0.5, 0.1));
+    refl->setFuzziness(0.25);
+    mesh->setMaterial(ShaderPtr(refl));
 
     GeometryReference* meshRef = new GeometryReference(GeometryPtr(mesh));
     mathernogl::Transform transform;
@@ -299,7 +313,9 @@ void Scene::build() {
     Mesh* mesh = new Mesh("resources/BowlingSet.obj");
     mesh->setSmoothShading(true);
     mesh->ensureNormalsNormalised();
-    mesh->setMaterial(std::make_shared<PhongShader>(resourceManager.loadImageTexture("resources/bs_diff.jpg"), Vector3D(1), 50));
+    ReflectionShader* refl = new ReflectionShader(resourceManager.loadImageTexture("resources/bs_diff.jpg"), Vector3D(1), 50, Vector3D(0.1));
+    refl->setFuzziness(0.15);
+    mesh->setMaterial(ShaderPtr(refl));
 
     GeometryReference* meshRef = new GeometryReference(GeometryPtr(mesh));
     mathernogl::Transform transform;

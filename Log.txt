@@ -1,4 +1,4 @@
-MathernoGL Log: Wed Nov  8 19:51:14 2017
+MathernoGL Log: Mon Nov 13 19:55:13 2017
 Loaded Mesh: 'resources/Square.obj'
 Loaded Image Texture: 'resources/wood_floor.jpg'
 Loaded Mesh: 'resources/BowlingSet.obj'
@@ -36,4 +36,4 @@ Generating Image: 88.611115%
 Generating Image: 91.666672% 
 Generating Image: 94.722221% 
 Generating Image: 97.777779% 
-Finished Image in 9 minutes 
+Finished Image in 16 minutes 

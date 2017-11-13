@@ -29,6 +29,9 @@ public:
   void setSpecularColour(const Vector3D& specularColour);
   void setSpecularExp(float specularExp);
 
+  //  set to use blinn-phong algorithm, rather than phong
+  void setBlinnPhong(bool blinnPhong) { this->blinnPhong = blinnPhong; }
+
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
 
 protected:
