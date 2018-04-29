@@ -8,7 +8,7 @@
 //#define SCENE_B     //  sphere and boxes
 //#define SCENE_C       //  lots of spheres
 //#define SCENE_D     //  random trees
-#define SCENE_E     //  single model (plant pot)
+//#define SCENE_E     //  single model (plant pot)
 
 //
 // Created by matherno on 1/08/17.

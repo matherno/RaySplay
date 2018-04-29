@@ -19,9 +19,8 @@ bool ImageOutputFile::prepare(uint imageWidth, uint imageHeight) {
   return (bool)image;
 }
 
-bool ImageOutputFile::paintPixel(uint x, uint y, const Vector3D& colour) {
+void ImageOutputFile::paintPixel(uint x, uint y, const Vector3D& colour) {
   pixels[POS_TO_INDEX(x, y)] = mathernogl::Vector4D(colour, 1);
-  return true;
 }
 
 bool ImageOutputFile::finalise() {

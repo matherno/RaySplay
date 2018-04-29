@@ -69,9 +69,9 @@ Mesh::Mesh(const std::string objFilePath, bool justFirstObject) {
 
 bool Mesh::init() {
   if (!isInitialised){
-    for(int indicesIndex = 0; indicesIndex < indices.size(); indicesIndex += 3){
+    for(int indicesIndex = 0; indicesIndex + 2 < indices.size(); indicesIndex += 3){
       MeshTriangle* triangle = new MeshTriangle(this);
-      triangle->set(indices[indicesIndex], indices[indicesIndex+1], indices[indicesIndex+2]);
+      triangle->set(indices[indicesIndex], indices[indicesIndex + 1], indices[indicesIndex + 2]);
       triangle->init();
       meshGrid.push_back(GeometryPtr(triangle));
     }

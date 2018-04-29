@@ -16,7 +16,7 @@ public:
   ImageOutputFile(const std::string& outputFilePath);
 
   bool prepare(uint imageWidth, uint imageHeight) override;
-  bool paintPixel(uint x, uint y, const Vector3D& colour) override;
+  void paintPixel(uint x, uint y, const Vector3D& colour) override;
   bool finalise() override;
 
   bool saveCurrentStateToFile(const std::string& filePath);

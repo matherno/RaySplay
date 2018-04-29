@@ -9,7 +9,8 @@ ImageTexture::ImageTexture(ColourMapPtr colourMap, uint width, uint height) : Te
 }
 
 Vector3D ImageTexture::getTexelColour(uint col, uint row) const {
-  return (*colourMap)[(col % width) + (row % height) * width];
+  mathernogl::Vector4D colour = (*colourMap)[(col % width) + (row % height) * width];
+  return Vector3D(colour.x, colour.y, colour.z);
 }
 
 Vector3D ImageTexture::getColour(const Vector2D& texCoord) const {

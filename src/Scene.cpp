@@ -18,6 +18,7 @@
 #include "Scene.h"
 #include "RayTracer.h"
 #include "AccelerationStructure.h"
+#include "SceneLoader.h"
 #include <ctime>
 #include <chrono>
 #include <geometries/GeometryReference.h>
@@ -61,6 +62,7 @@ void Scene::build() {
   sceneDef.lights.push_back(ambientLightSource);
 
   LightSourcePtr light;
+  light.reset(new DirectionLight(Vector3D(0.4), Vector3D(-1, -0.3, -0.4).getUniform()));
 
 #ifdef SCENE_A
   light.reset(new PointLight(Vector3D(0.72, 0.36, 0.24), Vector3D(0.25, 0.5, -5.5), 10, 1));
@@ -362,6 +364,11 @@ void Scene::build() {
 
 #endif
 
+  SceneLoader::loadSceneFromOBJ("resources/Workshop.obj", [grid](GeometryPtr object)
+    {
+    grid->push_back(object);
+    });
+
 }
 
 void Scene::render(ImageOutput* imageOutput) {
@@ -385,40 +392,41 @@ void Scene::render(ImageOutput* imageOutput) {
   std::shared_ptr<SampleSet> sampleSet;
   Vector3D pixelColour(0);
   Vector3D sampleColour(0);
+  uint pixelNum = 0;
 
   for(uint pixelY = 0; pixelY < viewDef.height; ++pixelY){
     for(uint pixelX = 0; pixelX < viewDef.width; ++pixelX){
-//      if (pixelX == 807 && pixelY == 638) {
-//        int a = 3;
-//        a++;
-//      }
 
-      pixelColour.set(0, 0, 0);
-      sampleSet = pixelSampleGenerator->getSampleSet(SampleGenerator::unitSquareMap);
-      while(sampleSet->nextSample(&samplePos)){
-        devicePoint.x = (float)pixelX + samplePos.x;
-        devicePoint.y = (float)pixelY + samplePos.y;
-        camera->getScreenRay(devicePoint, &viewDef, &screenRay);
+      if (!viewDef.debugMode || pixelNum % 4 == 0) {
+        pixelColour.set(0, 0, 0);
+        sampleSet = pixelSampleGenerator->getSampleSet(SampleGenerator::unitSquareMap);
+        while (sampleSet->nextSample(&samplePos)) {
+          devicePoint.x = (float) pixelX + samplePos.x;
+          devicePoint.y = (float) pixelY + samplePos.y;
+          camera->getScreenRay(devicePoint, &viewDef, &screenRay);
 
-        if(!RayTracer::traceRay(&screenRay, &sceneDef, &sampleColour)){
-          sampleColour = sceneDef.bgColour;
+          if (!RayTracer::traceRay(&screenRay, &sceneDef, &sampleColour))
+            sampleColour = sceneDef.bgColour;
+          pixelColour += sampleColour;
         }
-        pixelColour += sampleColour;
       }
-      paintPixel(pixelX, pixelY, pixelColour/pixelSampleGenerator->numSamples, imageOutput);
 
+      paintPixel(pixelX, pixelY, pixelColour/pixelSampleGenerator->numSamples, imageOutput);
+      ++pixelNum;
+      if (imageOutput->queryBail())
+        return;
     }
     if (pixelY % (int)(viewDef.height / NUM_UPDATES) == 0){
       mathernogl::logInfo("Generating Image: " + std::to_string((float)(pixelY*viewDef.width)/(viewDef.width*viewDef.height) * 100) + "% ");
     }
   }
 
-  imageOutput->finalise();
   float time = (float)(getTimeMS() - startTime) / 1000;
   if (time < 60)
     mathernogl::logInfo("Finished Image in " + std::to_string(time) + " seconds ");
   else
     mathernogl::logInfo("Finished Image in " + std::to_string(int(time / 60)) + " minutes ");
+  imageOutput->finalise();
 }
 
 void Scene::paintPixel(uint x, uint y, const Vector3D& colour, ImageOutput* imageOutput) {
