@@ -29,6 +29,7 @@ void ReflectionShader::setMirrorCol(const Vector3D& mirrorCol) {
 }
 
 void ReflectionShader::setFuzziness(float fuzziness) {
+  this->fuzziness = fuzziness;
   if (fuzziness < 1e-4) {
     isPerfectReflection = true;
   }

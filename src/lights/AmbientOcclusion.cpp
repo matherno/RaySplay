@@ -59,6 +59,7 @@ void AmbientOcclusion::setSampleRadius(float sampleRadius) {
 }
 
 void AmbientOcclusion::generateSamples(uint sqrtNumSamples) {
+  this->sqrtNumSamples = sqrtNumSamples;
   sampleGenerator = std::make_unique<BlueNoiseSampler>(sqrtNumSamples);
   sampleGenerator->generateUnitHemisphereSamples(1);
 }

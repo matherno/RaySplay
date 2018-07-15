@@ -19,6 +19,8 @@ public:
 
   Vector3D getPosition() const;
   Vector3D getColour() const;
+  float getRadius() const { return radius; }
+  float getFallOffExp() const { return falloffExp; }
   void setPosition(const Vector3D& position);
   void setColour(const Vector3D& colour);
 

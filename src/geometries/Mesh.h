@@ -12,6 +12,7 @@ class Mesh : public Geometry {
 private:
   bool smoothShading = false;
   RegularGrid meshGrid;
+  const string sourceFilePath;
 
 public:
   std::vector<Vector3D> vertices;
@@ -22,15 +23,11 @@ public:
   Mesh();
   Mesh(const std::string objFilePath, bool justFirstObject = true);
   virtual ~Mesh(){};
+  string getSourceFilePath() const { return sourceFilePath; }
 
   bool smoothShadingEnabled() const { return smoothShading; }
   void setSmoothShading(bool smoothShading);
   void ensureNormalsNormalised();
-
-  /*
-  *  scales the vertices to fit the given size, preserving the shape of the mesh
-  */
-  void scaleToSize(Vector3D size);
 
   virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
   virtual bool hitTest(const Ray* ray, float* hitTValue) const override;

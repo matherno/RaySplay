@@ -32,7 +32,7 @@ public:
 
   //  returns a world space screen ray which should be traced into the world, to retrieve the colour to be viewed at the given devicePoint
   //  device space starting (0,0) at top-left
-  virtual void getScreenRay(const Vector2D& devicePoint, const ViewDef* viewDef, Ray* screenRay) = 0;
+  virtual void getScreenRay(const Vector2D& devicePoint, const ViewDef* config, Ray* screenRay) = 0;
 
 protected:
   void calculateOrthoBasis();

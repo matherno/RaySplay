@@ -59,10 +59,10 @@ public:
  *  Mesh
  */
 
-Mesh::Mesh() {
+Mesh::Mesh() : sourceFilePath("") {
 }
 
-Mesh::Mesh(const std::string objFilePath, bool justFirstObject) {
+Mesh::Mesh(const std::string objFilePath, bool justFirstObject) : sourceFilePath(objFilePath) {
   mathernogl::loadObj(objFilePath, &indices, &vertices, &normals, &texCoords, justFirstObject);
   mathernogl::logInfo("Loaded Mesh: '" + objFilePath + "'");
 }
@@ -114,22 +114,3 @@ void Mesh::ensureNormalsNormalised() {
 const BoundingBoxPtr Mesh::getBoundingBox() const {
   return meshGrid.getBoundingBox();
 }
-
-void Mesh::scaleToSize(Vector3D size) {
-  BoundingBox vertexBB;
-  for (const Vector3D& vertex : vertices) {
-    vertexBB.addPoint(vertex);
-  }
-  Vector3D meshSize = vertexBB.getSize();
-
-  Vector3D scale;
-  scale.x = size.x / meshSize.x;
-  scale.y = size.y / meshSize.y;
-  scale.z = size.z / meshSize.z;
-  float minScale = std::min(scale.x, std::min(scale.y, scale.z));
-  for (Vector3D& vertex : vertices) {
-    vertex *= minScale;
-  }
-}
-
-

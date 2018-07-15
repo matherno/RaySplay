@@ -1,0 +1,105 @@
+<RaySplayScene TimeSaved="15/07/2018 15:52:51" Version="1">
+    <ViewDefinition Width="1024" Height="512" FOV="1.13" AntiAliasingDegree="3" InvGamma="0.5"/>
+    <CameraPerspective ViewPlaneOffset="2">
+        <Position X="-13.800000000000001" Y="5.5" Z="45"/>
+        <ViewDir X="0.35999999999999999" Y="-0.10000000000000001" Z="-1"/>
+        <ViewUp X="0" Y="1" Z="0"/>
+    </CameraPerspective>
+    <ExtraConfig MaxRayDepth="4">
+        <BackgroundColour X="0" Y="0" Z="0"/>
+    </ExtraConfig>
+    <Geometries>
+        <RegularGrid>
+            <AABox Material="1">
+                <LowerBound X="-10" Y="-20" Z="0"/>
+                <UpperBound X="10" Y="0" Z="30"/>
+            </AABox>
+            <AABox Material="2">
+                <LowerBound X="-10" Y="0" Z="-50"/>
+                <UpperBound X="10" Y="20" Z="0"/>
+            </AABox>
+            <AABox Material="3">
+                <LowerBound X="10" Y="0" Z="0"/>
+                <UpperBound X="20" Y="20" Z="40"/>
+            </AABox>
+            <AABox Material="4">
+                <LowerBound X="3" Y="0" Z="0"/>
+                <UpperBound X="6" Y="5" Z="16"/>
+            </AABox>
+            <Sphere Material="5" Radius="1.5">
+                <Position X="-1" Y="1.5" Z="5"/>
+            </Sphere>
+            <Sphere Material="6" Radius="1">
+                <Position X="-6.2999999999999998" Y="2" Z="8.1999999999999993"/>
+            </Sphere>
+            <AABox Material="7">
+                <LowerBound X="0" Y="0" Z="8"/>
+                <UpperBound X="1" Y="0.5" Z="15"/>
+            </AABox>
+            <Prefab Material="8" PrefabReference="0">
+                <Transform M00="0.86602540378443871" M01="0" M02="-0.49999999999999994" M03="0" M10="0" M11="1" M12="0" M13="0" M20="0.49999999999999994" M21="0" M22="0.86602540378443871" M23="0" M30="-7" M31="0" M32="8" M33="1"/>
+            </Prefab>
+            <Prefab Material="9" PrefabReference="0">
+                <Transform M00="0.66913060635885824" M01="0" M02="-0.74314482547739413" M03="0" M10="0" M11="1" M12="0" M13="0" M20="0.74314482547739413" M21="0" M22="0.66913060635885824" M23="0" M30="-5" M31="0" M32="10" M33="1"/>
+            </Prefab>
+            <Prefab Material="10" PrefabReference="0">
+                <Transform M00="0.50000000000000011" M01="0" M02="-0.8660254037844386" M03="0" M10="0" M11="1" M12="0" M13="0" M20="0.8660254037844386" M21="0" M22="0.50000000000000011" M23="0" M30="-8" M31="0" M32="15" M33="1"/>
+            </Prefab>
+        </RegularGrid>
+    </Geometries>
+    <PrefabedGeometries>
+        <AABox ID="0">
+            <LowerBound X="0" Y="0" Z="0"/>
+            <UpperBound X="1" Y="1" Z="1"/>
+        </AABox>
+    </PrefabedGeometries>
+    <Materials>
+        <Lambertian ID="1">
+            <Colour X="0.10000000149011612" Y="0.5" Z="0.20000000298023224"/>
+        </Lambertian>
+        <Lambertian ID="2">
+            <Colour X="0.10000000149011612" Y="0.10000000149011612" Z="0.40000000596046448"/>
+        </Lambertian>
+        <Lambertian ID="3">
+            <Colour X="0.40000000596046448" Y="0.10000000149011612" Z="0.10000000149011612"/>
+        </Lambertian>
+        <Reflection Exp="1" Fuzziness="0.15000001" ID="4">
+            <Colour X="0.20000000000000001" Y="0.20000000000000001" Z="0.20000000000000001"/>
+            <Specular X="0.20000000000000001" Y="0.20000000000000001" Z="0.20000000000000001"/>
+            <MirrorColour X="1" Y="1" Z="1"/>
+        </Reflection>
+        <Reflection Exp="10" Fuzziness="0" ID="5">
+            <Colour X="0.80000000000000004" Y="0" Z="0"/>
+            <Specular X="0.29999999999999999" Y="0.29999999999999999" Z="0.29999999999999999"/>
+            <MirrorColour X="1" Y="0" Z="1"/>
+        </Reflection>
+        <Reflection Exp="30" Fuzziness="0.80000001" ID="6">
+            <Colour X="0.69999999999999996" Y="0.20000000000000001" Z="0"/>
+            <Specular X="0.29999999999999999" Y="0.10000000000000001" Z="0.10000000000000001"/>
+            <MirrorColour X="0.5" Y="0.5" Z="0.5"/>
+        </Reflection>
+        <Phong Exp="5" ID="7">
+            <Colour X="0.59999999999999998" Y="0.29999999999999999" Z="0.59999999999999998"/>
+            <Specular X="0.90000000000000002" Y="0.29999999999999999" Z="0.29999999999999999"/>
+        </Phong>
+        <Lambertian ID="8">
+            <Colour X="0.05000000074505806" Y="0.10000000149011612" Z="0.5"/>
+        </Lambertian>
+        <Phong Exp="0" ID="9">
+            <Colour X="0.69999999999999996" Y="0.29999999999999999" Z="0.10000000000000001"/>
+            <Specular X="0" Y="0" Z="0"/>
+        </Phong>
+        <Lambertian ID="10">
+            <Colour X="0.10000000149011612" Y="0.60000002384185791" Z="0.40000000596046448"/>
+        </Lambertian>
+    </Materials>
+    <Lights>
+        <AmbientLight>
+            <Colour X="0.02" Y="0.02" Z="0.02"/>
+        </AmbientLight>
+        <PointLight Radius="30" Falloff="2">
+            <Colour X="0.59999999999999998" Y="0.59999999999999998" Z="0.59999999999999998"/>
+            <Position X="-10" Y="10" Z="15"/>
+        </PointLight>
+    </Lights>
+</RaySplayScene>

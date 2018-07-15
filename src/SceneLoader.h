@@ -1,15 +1,18 @@
 #pragma once
 
+#include <geometries/ObjMeshSet.h>
 #include "SceneDef.h"
+#include "Scene.h"
 
 /*
 *   
 */
 
-typedef std::function<void(GeometryPtr object)> AddGeometryFunc;
-
 class SceneLoader
   {
 public:
-  static void loadSceneFromOBJ(const std::string& filePath, AddGeometryFunc addGeometry);
+  static std::shared_ptr<ObjMeshSet> loadSceneFromOBJ(const std::string& filePath);
+
+  static bool loadSceneFromXML(const std::string& filePath, Scene* scene);
+  static bool saveSceneToXML(const std::string& filePath, Scene* scene);
   };

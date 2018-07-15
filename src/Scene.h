@@ -4,12 +4,6 @@
 #define RS_DEBUG
 #endif
 
-//#define SCENE_A     //  original
-//#define SCENE_B     //  sphere and boxes
-//#define SCENE_C       //  lots of spheres
-//#define SCENE_D     //  random trees
-//#define SCENE_E     //  single model (plant pot)
-
 //
 // Created by matherno on 1/08/17.
 //
@@ -33,7 +27,7 @@ private:
 public:
   Scene();
 
-  void build();
+  bool build(string sceneXMLFilePath);
   void render(ImageOutput* imageOutput);
   void paintPixel(uint x, uint y, const Vector3D& colour, ImageOutput* imageOutput);
 

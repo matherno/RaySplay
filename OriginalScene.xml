@@ -1,0 +1,59 @@
+<RaySplayScene TimeSaved="15/07/2018 12:29:13" Version="1">
+    <ViewDefinition Width="1024" Height="512" FOV="1.13" AntiAliasingDegree="1" InvGamma="0.5"/>
+    <CameraPerspective ViewPlaneOffset="1">
+        <Position X="0" Y="0.5" Z="-2"/>
+        <ViewDir X="0" Y="-0.080000000000000002" Z="-1"/>
+        <ViewUp X="0" Y="1" Z="0"/>
+    </CameraPerspective>
+    <ExtraConfig MaxRayDepth="4">
+        <BackgroundColour X="0" Y="0" Z="0"/>
+    </ExtraConfig>
+    <Geometries>
+        <RegularGrid>
+            <Sphere Material="1" Radius="0.40000001">
+                <Position X="0" Y="0.29999999999999999" Z="-8"/>
+            </Sphere>
+            <Sphere Material="2" Radius="0.5">
+                <Position X="1" Y="0" Z="-6"/>
+            </Sphere>
+            <AABox Material="3">
+                <LowerBound X="-1.05" Y="-0.5" Z="-7.5"/>
+                <UpperBound X="-0.65000000000000002" Y="0" Z="-6"/>
+            </AABox>
+        </RegularGrid>
+        <Plane Material="4">
+            <Position X="0.75" Y="-0.5" Z="-6"/>
+            <Normal X="0" Y="1" Z="0"/>
+        </Plane>
+        <Plane Material="5">
+            <Position X="0" Y="0" Z="-10"/>
+            <Normal X="0" Y="0" Z="1"/>
+        </Plane>
+    </Geometries>
+    <Materials>
+        <Lambertian ID="1">
+            <Colour X="0.10000000149011612" Y="0.40000000596046448" Z="0.10000000149011612"/>
+        </Lambertian>
+        <Lambertian ID="2">
+            <Colour X="0.40000000596046448" Y="0.20000000298023224" Z="0.89999997615814209"/>
+        </Lambertian>
+        <Lambertian ID="3">
+            <Colour X="0.80000001192092896" Y="0.80000001192092896" Z="0.20000000298023224"/>
+        </Lambertian>
+        <Lambertian ID="4">
+            <Colour X="0.69999998807907104" Y="0.10000000149011612" Z="0.10000000149011612"/>
+        </Lambertian>
+        <Lambertian ID="5">
+            <Colour X="0.10000000149011612" Y="0.10000000149011612" Z="0.69999998807907104"/>
+        </Lambertian>
+    </Materials>
+    <Lights>
+        <AmbientLight>
+            <Colour X="0.02" Y="0.02" Z="0.02"/>
+        </AmbientLight>
+        <PointLight Radius="10" Falloff="1">
+            <Colour X="0.71999999999999997" Y="0.35999999999999999" Z="0.23999999999999999"/>
+            <Position X="0.25" Y="0.5" Z="-5.5"/>
+        </PointLight>
+    </Lights>
+</RaySplayScene>

@@ -13,12 +13,14 @@ typedef std::shared_ptr<Shader> ShaderPtr;
 #include "SceneDef.h"
 #include "RaySplayConst.h"
 
+static uint nextShaderID = 1;
+
 class Shader {
 public:
-  Shader(){}
+  const uint id;
+  Shader() : id (nextShaderID++) {}
   virtual ~Shader(){}
 
   //  shades the given surface, as seen through the given ray, and returns the resulting colour
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) = 0;
 };
-

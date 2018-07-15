@@ -13,6 +13,7 @@ private:
   Vector3D ambientColour;
   std::unique_ptr<SampleGenerator> sampleGenerator;
   float sampleRadius;
+  uint sqrtNumSamples = 2;
 
 public:
   AmbientOcclusion();
@@ -23,6 +24,7 @@ public:
   float getSampleRadius() const;
   void setSampleRadius(float sampleRadius);
   void generateSamples(uint sqrtNumSamples);
+  uint getSqrtNumSamples() const { return sqrtNumSamples; }
 
   virtual bool isAmbient() override { return true; }
   virtual bool isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;

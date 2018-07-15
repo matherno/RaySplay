@@ -1,0 +1,31 @@
+<RaySplayScene TimeSaved="15/07/2018 11:29:01" Version="1">
+    <ViewDefinition Width="1024" Height="512" FOV="1.13" AntiAliasingDegree="1" InvGamma="0.5"/>
+    <CameraPerspective ViewPlaneOffset="1.4">
+        <Position X="13" Y="6" Z="25"/>
+        <ViewDir X="-19" Y="-2" Z="-25"/>
+        <ViewUp X="0" Y="1" Z="0"/>
+    </CameraPerspective>
+    <ExtraConfig MaxRayDepth="4">
+        <BackgroundColour X="0" Y="0" Z="0"/>
+    </ExtraConfig>
+    <Geometries>
+        <MeshSet FilePath="resources/Workshop.obj"/>
+    </Geometries>
+    <Lights>
+        <AmbientLight>
+            <Colour X="0.02" Y="0.02" Z="0.02"/>
+        </AmbientLight>
+        <PointLight Radius="20" Falloff="3">
+            <Colour X="0.050000000000000003" Y="0.040000000000000008" Z="0.034999999999999996"/>
+            <Position X="4.71" Y="7.6600000000000001" Z="5.5599999999999996"/>
+        </PointLight>
+        <PointLight Radius="15" Falloff="1">
+            <Colour X="1" Y="0.59999999999999998" Z="0.10000000000000001"/>
+            <Position X="-6.2759999999999998" Y="3.3500000000000001" Z="8.3640000000000008"/>
+        </PointLight>
+        <PointLight Radius="15" Falloff="1">
+            <Colour X="1" Y="0.59999999999999998" Z="0.10000000000000001"/>
+            <Position X="-7.21" Y="3.5" Z="3.1160000000000001"/>
+        </PointLight>
+    </Lights>
+</RaySplayScene>

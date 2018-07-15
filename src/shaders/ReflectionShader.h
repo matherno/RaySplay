@@ -11,6 +11,7 @@ private:
   Vector3D mirrorCol;
   bool isPerfectReflection = true;
   std::unique_ptr<SampleGenerator> sampler;
+  float fuzziness = 0;
 
 public:
   ReflectionShader();
@@ -24,6 +25,7 @@ public:
    *  Controls the fuzziness of the reflection, 0 being a perfect reflection, 1 being the max fuzziness
    */
   void setFuzziness(float fuzziness);
+  float getFuzziness() const { return fuzziness; }
 
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
 
