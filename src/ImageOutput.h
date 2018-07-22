@@ -20,4 +20,7 @@ public:
 
   //  is called frequently and will bail the process if returned true (without a call to finalise())
   virtual bool queryBail() { return false; }
+
+  //  is called to update the image output on the progress of the render
+  virtual void updateProgress(float percent) {}
 };

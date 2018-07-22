@@ -11,7 +11,7 @@ struct ViewDef {
   float fov = 1;
   float invGamma = 1;
   int antiAliasingDegree = 1;
-  bool debugMode = false;
+  bool draftMode = false;
 
   float getAspectRatio() const { return (float) width / height; }
   float getPixelSize() const { return fov / width; }

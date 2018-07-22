@@ -15,4 +15,5 @@ struct SceneDef {
 
   Vector3D bgColour;
   int maxRayDepth = 4;
+  bool disableAmbientOcclusion = false;
 };

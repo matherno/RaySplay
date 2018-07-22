@@ -24,6 +24,9 @@ Vector3D AmbientOcclusion::lightDirectionAtPoint(const SurfaceInfo* surfaceInfo,
 }
 
 Vector3D AmbientOcclusion::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
+  if (sceneDef->disableAmbientOcclusion)
+    return ambientColour;
+
   Vector3D w = surfaceInfo->normal;
   Vector3D v = mathernogl::crossProduct(w, Vector3D(0.0072, 1.0, 0.0034)).getUniform();
   Vector3D u = mathernogl::crossProduct(v, w);

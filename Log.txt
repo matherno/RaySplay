@@ -1,10 +1,35 @@
-MathernoGL Log: Sun Jul 15 16:55:49 2018
-Using OpenGL version: 3.3.0 NVIDIA 384.90
+MathernoGL Log: Sun Jul 22 18:10:28 2018
 Generating Image: 0.000000% 
-Generating Image: 12.500000% 
-Generating Image: 25.000000% 
-Generating Image: 37.500000% 
-Generating Image: 50.000000% 
-Generating Image: 62.500000% 
-Generating Image: 75.000000% 
-Generating Image: 87.500000% 
+Generating Image: 3.055556% 
+Generating Image: 6.111111% 
+Generating Image: 9.166667% 
+Generating Image: 12.222222% 
+Generating Image: 15.277778% 
+Generating Image: 18.333334% 
+Generating Image: 21.388889% 
+Generating Image: 24.444445% 
+Generating Image: 27.500000% 
+Generating Image: 30.555555% 
+Generating Image: 33.611111% 
+Generating Image: 36.666668% 
+Generating Image: 39.722221% 
+Generating Image: 42.777779% 
+Generating Image: 45.833336% 
+Generating Image: 48.888889% 
+Generating Image: 51.944447% 
+Generating Image: 55.000000% 
+Generating Image: 58.055557% 
+Generating Image: 61.111111% 
+Generating Image: 64.166664% 
+Generating Image: 67.222221% 
+Generating Image: 70.277779% 
+Generating Image: 73.333336% 
+Generating Image: 76.388893% 
+Generating Image: 79.444443% 
+Generating Image: 82.500000% 
+Generating Image: 85.555557% 
+Generating Image: 88.611115% 
+Generating Image: 91.666672% 
+Generating Image: 94.722221% 
+Generating Image: 97.777779% 
+Finished Image in 4.963000 seconds 

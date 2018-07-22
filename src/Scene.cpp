@@ -24,11 +24,7 @@
 #include <geometries/GeometryReference.h>
 #include <shaders/NormalsTestShader.h>
 
-#ifdef RS_DEBUG
-#define NUM_UPDATES 8
-#else
 #define NUM_UPDATES 32
-#endif
 
 long getTimeMS() {
   using namespace std::chrono;
@@ -81,7 +77,7 @@ void Scene::render(ImageOutput* imageOutput) {
   for(uint pixelY = 0; pixelY < viewDef.height; ++pixelY){
     for(uint pixelX = 0; pixelX < viewDef.width; ++pixelX){
 
-      if (!viewDef.debugMode || pixelNum % 4 == 0) {
+      if (!viewDef.draftMode || pixelNum % 4 == 0) {
         pixelColour.set(0, 0, 0);
         sampleSet = pixelSampleGenerator->getSampleSet(SampleGenerator::unitSquareMap);
         while (sampleSet->nextSample(&samplePos)) {
@@ -101,7 +97,9 @@ void Scene::render(ImageOutput* imageOutput) {
         return;
     }
     if (pixelY % (int)(viewDef.height / NUM_UPDATES) == 0){
-      mathernogl::logInfo("Generating Image: " + std::to_string((float)(pixelY*viewDef.width)/(viewDef.width*viewDef.height) * 100) + "% ");
+      const float percent = (float)(pixelY*viewDef.width)/(viewDef.width*viewDef.height) * 100;
+      mathernogl::logInfo("Generating Image: " + std::to_string(percent) + "% ");
+      imageOutput->updateProgress(percent);
     }
   }
 
