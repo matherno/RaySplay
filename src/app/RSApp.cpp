@@ -105,6 +105,7 @@ void RSMainFrame::onRender(wxCommandEvent& event)
       scene.getViewDef()->width = 1280;
       scene.getViewDef()->height = 720;
       scene.getViewDef()->draftMode = true;
+      scene.getViewDef()->antiAliasingDegree = 1;
       scene.getSceneDef()->disableAmbientOcclusion = true;
       }
 
