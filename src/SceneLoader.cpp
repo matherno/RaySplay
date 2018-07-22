@@ -249,8 +249,15 @@ static void loadGeometries(XMLDocument& doc, XMLElement* geometriesElement, std:
     if (geometryType == MESH_SET)
       {
       const string filePath = getStringAttribute(geometryElement, FILE_PATH);
-      if (!filePath.empty())
-        geometry = SceneLoader::loadSceneFromOBJ(filePath);
+      try
+        {
+        if (!filePath.empty())
+          geometry = SceneLoader::loadSceneFromOBJ(filePath);
+        }
+      catch (std::runtime_error& err)
+        {
+        mathernogl::logWarning(err.what());
+        }
       }
     else if (geometryType == GEOMETRY_SET || geometryType == REGULAR_GRID)
       {
