@@ -31,14 +31,14 @@ Vector3D AmbientOcclusion::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo,
   Vector3D v = mathernogl::crossProduct(w, Vector3D(0.0072, 1.0, 0.0034)).getUniform();
   Vector3D u = mathernogl::crossProduct(v, w);
 
-  float shadowIntensity = 0;
+  double shadowIntensity = 0;
   Vector3D sample;
   std::shared_ptr<SampleSet> sampleSet = sampleGenerator->getSampleSet(SampleGenerator::unitHemisphereMap);
   while(sampleSet->nextSample(&sample)){
     Ray shadowRay = Ray::create(surfaceInfo->position, u*sample.x + v*sample.y + w*sample.z);
     float hitTValue;
     if(RayTracer::traceShadowRay(&shadowRay, sceneDef, &hitTValue)){
-      shadowIntensity += mathernogl::clampf(1.0f - (hitTValue/sampleRadius), 0.0f, 1.0f);
+      shadowIntensity += mathernogl::clampd(1.0 - (hitTValue/sampleRadius), 0.0, 1.0);
     }
   }
 

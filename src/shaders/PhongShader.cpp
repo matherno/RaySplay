@@ -26,10 +26,10 @@ Vector3D PhongShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surface
       }
       else{
         Vector3D lightDir = light->lightDirectionAtPoint(surfaceInfo, sceneDef);
-        float lightDotNormal = mathernogl::dotProduct(surfaceInfo->normal, lightDir);
+        double lightDotNormal = mathernogl::dotProduct(surfaceInfo->normal, lightDir);
         if(lightDotNormal > 0){
           lightDotNormal *= lightDotNormal;
-          float cosSpecularAngle;
+          double cosSpecularAngle;
           if(blinnPhong){
             Vector3D halfVector = lightDir + (hitRay->direction * -1);
             halfVector.makeUniform();
@@ -39,7 +39,7 @@ Vector3D PhongShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surface
             Vector3D reflectionDir = mathernogl::reflect(lightDir, surfaceInfo->normal);
             cosSpecularAngle = (float)fabs(mathernogl::dotProduct(reflectionDir, hitRay->direction * -1));
           }
-          finalColour += (diffuse + specularColour * (float)pow(cosSpecularAngle, specularExp)) * (lightIntensity * lightDotNormal);
+          finalColour += (diffuse + specularColour * pow(cosSpecularAngle, specularExp)) * (lightIntensity * lightDotNormal);
         }
       }
     }

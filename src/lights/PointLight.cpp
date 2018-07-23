@@ -30,11 +30,11 @@ Vector3D PointLight::lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const
 }
 
 Vector3D PointLight::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  float lightDistance = (position - surfaceInfo->position).magnitude();
-  float lightAttenuation = 1.0f - (lightDistance / radius);
+  double lightDistance = (position - surfaceInfo->position).magnitude();
+  double lightAttenuation = 1.0f - (lightDistance / radius);
   if(lightAttenuation < 0 || lightAttenuation > 1)
     return Vector3D();
-  lightAttenuation = (float)pow(lightAttenuation, falloffExp);
+  lightAttenuation = pow(lightAttenuation, falloffExp);
   return colour * lightAttenuation;
 }
 

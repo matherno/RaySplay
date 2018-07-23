@@ -1,4 +1,4 @@
-MathernoGL Log: Sun Jul 22 18:10:28 2018
+MathernoGL Log: Mon Jul 23 18:23:21 2018
 Generating Image: 0.000000% 
 Generating Image: 3.055556% 
 Generating Image: 6.111111% 
@@ -27,9 +27,3 @@ Generating Image: 73.333336%
 Generating Image: 76.388893% 
 Generating Image: 79.444443% 
 Generating Image: 82.500000% 
-Generating Image: 85.555557% 
-Generating Image: 88.611115% 
-Generating Image: 91.666672% 
-Generating Image: 94.722221% 
-Generating Image: 97.777779% 
-Finished Image in 4.963000 seconds 

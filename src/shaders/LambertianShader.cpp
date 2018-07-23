@@ -23,7 +23,7 @@ Vector3D LambertianShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* su
   Vector3D diffuse = getDiffuseColour(surfaceInfo);
   for(LightSourcePtr light : sceneDef->lights){
     if(!light->isPointInShadow(surfaceInfo, sceneDef)){
-      float lightFactor = 1;
+      double lightFactor = 1;
       if(!light->isAmbient()){
         lightFactor = mathernogl::dotProduct(surfaceInfo->normal, light->lightDirectionAtPoint(surfaceInfo, sceneDef));
       }
