@@ -64,7 +64,6 @@
 #define VEC3D_Z "Z"
 #define BGCOLOUR "BackgroundColour"
 #define RADIUS "Radius"
-#define SQRT_NUM_SAMPLES "SqrtNumSamples"
 #define DIRECTION "Direction"
 #define POSITION "Position"
 #define TRANSFORM "Transform"
@@ -346,8 +345,7 @@ static void loadLightSources(XMLDocument& doc, XMLElement* lightSourcesElement, 
       {
       Vector3D colour = getVector3DValue(doc, lightElement->FirstChildElement(COLOUR));
       float radius = lightElement->FloatAttribute(RADIUS, 4);
-      uint sqrtNumSamples = lightElement->UnsignedAttribute(SQRT_NUM_SAMPLES, 2);
-      lightSource.reset(new AmbientOcclusion(colour, radius, sqrtNumSamples));
+      lightSource.reset(new AmbientOcclusion(colour, radius));
       }
     else if (lightSourceType == DIRECTION_LIGHT)
       {
@@ -645,7 +643,6 @@ static void saveLightSource(XMLDocument& doc, XMLElement* parent, LightSourcePtr
     XMLElement* element = createElement(doc, parent, AMBIENT_OCCLUSION);
     setVector3DValue(doc, createElement(doc, element, COLOUR), ambientLight->getAmbientColour());
     element->SetAttribute(RADIUS, ambientLight->getSampleRadius());
-    element->SetAttribute(SQRT_NUM_SAMPLES, ambientLight->getSqrtNumSamples());
     return;
     }
 

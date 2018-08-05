@@ -11,6 +11,7 @@ private:
   Vector3D mirrorCol;
   bool isPerfectReflection = true;
   std::unique_ptr<SampleGenerator> sampler;
+  SampleSetPtr sampleSetPtr;
   float fuzziness = 0;
 
 public:
