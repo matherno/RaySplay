@@ -19,7 +19,7 @@ Vector3D PhongShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surface
   Vector3D finalColour(0);
   Vector3D diffuse = getDiffuseColour(surfaceInfo);
   for(LightSourcePtr light : sceneDef->lights){
-    if(!light->isPointInShadow(surfaceInfo, sceneDef)){
+    if(light->startShadingAtPoint(surfaceInfo, sceneDef) && !light->isPointInShadow(surfaceInfo, sceneDef)){
       Vector3D lightIntensity = light->lightIntensityAtPoint(surfaceInfo, sceneDef);
       if(light->isAmbient()){
         finalColour += diffuse * lightIntensity;

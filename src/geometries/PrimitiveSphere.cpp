@@ -2,15 +2,18 @@
 // Created by matherno on 1/08/17.
 //
 
+#include <Samplers.h>
 #include "PrimitiveSphere.h"
 #include "RaySplayConst.h"
 
 PrimitiveSphere::PrimitiveSphere() : centre(0), radius(1) {
   radiusSquared = radius * radius;
+  setupSurfaceSampler();
 }
 
 PrimitiveSphere::PrimitiveSphere(const mathernogl::Vector3D& centre, float radius) : centre(centre), radius(radius) {
   radiusSquared = radius * radius;
+  setupSurfaceSampler();
 }
 
 const mathernogl::Vector3D& PrimitiveSphere::getCentre() const {
@@ -102,5 +105,19 @@ bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue) const {
 void PrimitiveSphere::constructBoundingBox() {
   boundingBox = std::make_shared<BoundingBox>(centre - radius, centre + radius);
 }
+
+bool PrimitiveSphere::getSurfaceSample(Vector3D* position, Vector3D* normal)
+  {
+  *position = samplerHelper.getNextSample() * radius + centre;
+  *normal = (*position - centre).getUniform();
+  return true;
+  }
+
+void PrimitiveSphere::setupSurfaceSampler()
+  {
+  BlueNoiseSampler* sampler = new BlueNoiseSampler(10);
+  sampler->generateUnitSphereSamples();
+  samplerHelper.initialise(std::shared_ptr<SampleGenerator>(sampler), SampleGenerator::unitSphereMap);
+  }
 
 

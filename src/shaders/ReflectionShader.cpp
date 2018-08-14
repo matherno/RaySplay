@@ -21,7 +21,9 @@ ReflectionShader::ReflectionShader(TexturePtr diffuseTexture, const Vector3D& sp
 }
 
 void ReflectionShader::initSampler(uint sqrtNumSamples) {
-  sampler.reset(new BlueNoiseSampler(sqrtNumSamples, 1));
+  BlueNoiseSampler* sampler = new BlueNoiseSampler(sqrtNumSamples);
+  sampler->generateUnitHemisphereSamples(fuzziness > 0 ? 1.0f / fuzziness : 99999);
+  samplerHelper.initialise(std::shared_ptr<SampleGenerator>(sampler), SampleGenerator::unitHemisphereMap);
 }
 
 void ReflectionShader::setMirrorCol(const Vector3D& mirrorCol) {
@@ -31,8 +33,6 @@ void ReflectionShader::setMirrorCol(const Vector3D& mirrorCol) {
 void ReflectionShader::setFuzziness(float fuzziness) {
   this->fuzziness = fuzziness;
   initSampler(10);
-  sampler->generateUnitHemisphereSamples(1.0f / fuzziness);
-  sampleSetPtr = sampler->getSampleSet(SampleGenerator::unitHemisphereMap);
 }
 
 
@@ -51,13 +51,10 @@ Vector3D ReflectionShader::calcReflectedLight(const Ray* hitRay, const SurfaceIn
   u.makeUniform();
   Vector3D v = crossProduct(u, w);
 
-  //  get next sample from the set, (obtaining next set if current one is out)
-  Vector3D sample, resultingLight(0);
-  if(!sampleSetPtr->nextSample(&sample))
-    {
-    sampleSetPtr = sampler->getSampleSet(SampleGenerator::unitHemisphereMap);
-    sampleSetPtr->nextSample(&sample);
-    }
+  //  get next sample
+  Vector3D sample (0, 0, 1);
+  if (fuzziness > 0)
+    sample = samplerHelper.getNextSample();
 
   //  use orthonormal basis to transform the sample hemisphere into the direction of the perfect reflection
   Vector3D sampleReflection = (u * sample.x) + (v * sample.y) + (w * sample.z);
@@ -66,6 +63,7 @@ Vector3D ReflectionShader::calcReflectedLight(const Ray* hitRay, const SurfaceIn
 
   //  trace a reflected ray to determine the colour of the light reaching the surface from that direction
   Ray reflectedRay = Ray::create(surfaceInfo->position, sampleReflection);
+  Vector3D resultingLight(0);
   reflectedRay.depth = hitRay->depth + 1;
   Vector3D reflectedCol(0);
   if(RayTracer::traceRay(&reflectedRay, sceneDef, &reflectedCol))

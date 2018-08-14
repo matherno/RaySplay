@@ -18,6 +18,7 @@ protected:
   ShaderPtr material;
   BoundingBoxPtr boundingBox;
   bool isInitialised = false;
+  bool castsShadows = true;
 
 public:
   Geometry() {};
@@ -26,6 +27,8 @@ public:
   ShaderPtr getMaterial() const { return material; }
   void setMaterial(ShaderPtr material) { this->material = material; }
   virtual const BoundingBoxPtr getBoundingBox() const { return boundingBox; };
+  void setCastShadows(bool shadows) { castsShadows = shadows; }
+  bool canCastShadows() const { return castsShadows; }
 
   //  called before render to initialise if needed
   //  returns true if initialisation was performed, false if it already has been
@@ -48,5 +51,7 @@ public:
   //  initialise this geometry object, including constructing its bounding box
   virtual void constructBoundingBox() = 0;
 
+  //  obtains a uniformly distributed random sample of this geometries surface
+  virtual bool getSurfaceSample(Vector3D* position, Vector3D* normal) { ASSERT(false, "Not Implemented"); return false; }
 };
 

@@ -23,6 +23,11 @@ public:
   virtual //  returns true if this light source is ambient / doesn't have a source direction
   bool isAmbient() { return false; }
 
+  //  to be called when a point of given surface info is starting to be shaded
+  //  allows the light to get ready for subsequent calls of lightDirectionAtPoint(), lightIntensityAtPoint(), etc, for that point
+  //  shaders will perform no shading with this light if returns false
+  virtual bool startShadingAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) { return true; }
+
   //  returns true if the given surface point is in this lights shadow
   virtual bool isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) = 0;
 
@@ -32,5 +37,7 @@ public:
 
   //  returns the intensity(colour) of the light at the given point
   virtual Vector3D lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) = 0;
+
+
 };
 

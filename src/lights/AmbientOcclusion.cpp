@@ -31,12 +31,7 @@ Vector3D AmbientOcclusion::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo,
   Vector3D v = mathernogl::crossProduct(w, Vector3D(0.0072, 1.0, 0.0034)).getUniform();
   Vector3D u = mathernogl::crossProduct(v, w);
 
-  Vector3D sample;
-  if(!sampleSetPtr->nextSample(&sample))
-    {
-    sampleSetPtr = sampleGenerator->getSampleSet(SampleGenerator::unitHemisphereMap);
-    sampleSetPtr->nextSample(&sample);
-    }
+  Vector3D sample = samplerHelper.getNextSample();
 
   Ray shadowRay = Ray::create(surfaceInfo->position, u*sample.x + v*sample.y + w*sample.z);
   float hitTValue;
@@ -65,7 +60,7 @@ void AmbientOcclusion::setSampleRadius(float sampleRadius) {
 }
 
 void AmbientOcclusion::generateSamples() {
-  sampleGenerator = std::make_unique<BlueNoiseSampler>(100, 1);
-  sampleGenerator->generateUnitHemisphereSamples(1);
-  sampleSetPtr = sampleGenerator->getSampleSet(SampleGenerator::unitHemisphereMap);
+  BlueNoiseSampler* sampler = new BlueNoiseSampler(10);
+  sampler->generateUnitHemisphereSamples(1);
+  samplerHelper.initialise(std::shared_ptr<SampleGenerator>(sampler), SampleGenerator::unitHemisphereMap);
   }

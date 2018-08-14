@@ -10,8 +10,7 @@ class ReflectionShader : public PhongShader {
 private:
   Vector3D mirrorCol;
   bool isPerfectReflection = true;
-  std::unique_ptr<SampleGenerator> sampler;
-  SampleSetPtr sampleSetPtr;
+  ContinousSamplerHelper samplerHelper;
   float fuzziness = 0;
 
 public:

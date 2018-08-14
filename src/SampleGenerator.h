@@ -4,6 +4,7 @@
 //
 
 #include <mathernogl/MathernoGL.h>
+#include "RaySplayConst.h"
 
 #define DEFAULT_NUM_SAMPLE_SETS 83
 
@@ -18,7 +19,8 @@ public:
   enum SampleMapType{
     unitSquareMap,
     unitCircleMap,
-    unitHemisphereMap
+    unitHemisphereMap,
+    unitSphereMap
   };
 
 private:
@@ -28,6 +30,7 @@ protected:
   std::vector<mathernogl::Vector2D> squareMapSamples;       //  unit square (0,0) -> (1,1), any point inside
   std::vector<mathernogl::Vector2D> circleMapSamples;       //  unit circle, centre (0,0), radius 1, any point inside
   std::vector<mathernogl::Vector3D> hemisphereMapSamples;   //  unit hemisphere => a sphere with centre (0,0,0), radius 1, where z > 0, samples will be on the circumference
+  std::vector<mathernogl::Vector3D> sphereMapSamples;       //  unit sphere => a sphere with centre (0,0,0), radius 1, samples will be on the circumference
 
 public:
   const int numSamples;
@@ -38,6 +41,7 @@ public:
   virtual ~SampleGenerator(){};
 
   void generateUnitCircleSamples();
+  void generateUnitSphereSamples();
   void generateUnitHemisphereSamples(float distributionExp);
 
   SampleSetPtr getSampleSet(SampleMapType sampleMapType);
@@ -68,3 +72,15 @@ public:
     return isValid && nextSampleNum < generator->numSamples;
   }
 };
+
+class ContinousSamplerHelper
+  {
+private:
+  std::shared_ptr<SampleGenerator> generator;
+  SampleSetPtr currentSampleSet;
+  SampleGenerator::SampleMapType sampleType;
+
+public:
+  void initialise(std::shared_ptr<SampleGenerator> generator, SampleGenerator::SampleMapType sampleType);
+  Vector3D getNextSample();
+  };

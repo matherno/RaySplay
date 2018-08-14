@@ -11,8 +11,7 @@
 class AmbientOcclusion : public LightSource {
 private:
   Vector3D ambientColour;
-  std::unique_ptr<SampleGenerator> sampleGenerator;
-  SampleSetPtr sampleSetPtr;
+  ContinousSamplerHelper samplerHelper;
   float sampleRadius;
 
 public:

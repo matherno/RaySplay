@@ -3,6 +3,8 @@
 //
 
 #include "Samplers.h"
+
+#include <random>
 #include "RaySplayConst.h"
 
 int shuffleRand(int n) {
@@ -14,7 +16,7 @@ int shuffleRand(int n) {
  */
 
 void shuffleAndAppend(std::vector<Vector2D>* src, std::vector<Vector2D>* target) {
-  std::random_shuffle(src->begin(), src->end(), shuffleRand);
+  std::shuffle(src->begin(), src->end(), std::mt19937(std::random_device()()));
   target->insert(target->end(), src->begin(), src->end());
 }
 

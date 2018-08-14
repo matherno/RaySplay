@@ -10,6 +10,8 @@
 #include <geometries/PrimitiveBoxAA.h>
 #include <geometries/GeometryReference.h>
 #include <shaders/ReflectionShader.h>
+#include <lights/AreaLight.h>
+#include <shaders/EmissionShader.h>
 #include "SceneLoader.h"
 #include "RaySplayConst.h"
 #include "tinyxml2/tinyxml2.h"
@@ -35,6 +37,7 @@
 
 #define UNKNOWN_TYPE "UnknownType"
 #define GEOMETRY_SET "GeometrySet"
+#define GEOMETRY "Geometry"
 #define MESH_SET "MeshSet"
 #define REGULAR_GRID "RegularGrid"
 #define MESH "Mesh"
@@ -46,6 +49,7 @@
 #define AMBIENT_OCCLUSION "AmbientOcclusion"
 #define DIRECTION_LIGHT "DirectionLight"
 #define POINT_LIGHT "PointLight"
+#define AREA_LIGHT "AreaLight"
 #define LAMBERTIAN "Lambertian"
 #define PHONG "Phong"
 #define REFLECTION "Reflection"
@@ -236,6 +240,58 @@ static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::m
 
 typedef std::function<void(XMLElement* geometryElement, GeometryPtr geometry)> AddGeometryFunc;
 
+static GeometryPtr loadSingularGeometry(XMLDocument& doc, XMLElement* geometryElement, std::map<uint, GeometryPtr>* prefabedGeometries)
+  {
+  if (!geometryElement)
+    return nullptr;
+
+  const string geometryType = geometryElement->Value();
+  GeometryPtr geometry;
+  if (geometryType == SPHERE)
+    {
+    const float radius = geometryElement->FloatAttribute(RADIUS, 1);
+    const Vector3D centre = getVector3DValue(doc, geometryElement->FirstChildElement(POSITION));
+    geometry.reset(new PrimitiveSphere(centre, radius));
+    }
+  else if (geometryType == AABOX)
+    {
+    const Vector3D lb = getVector3DValue(doc, geometryElement->FirstChildElement(LOWERBOUND));
+    const Vector3D ub = getVector3DValue(doc, geometryElement->FirstChildElement(UPPERBOUND));
+    geometry.reset(new PrimitiveBoxAA(lb, ub));
+    }
+  else if (geometryType == PLANE)
+    {
+    const Vector3D pos = getVector3DValue(doc, geometryElement->FirstChildElement(POSITION));
+    const Vector3D norm = getVector3DValue(doc, geometryElement->FirstChildElement(NORMAL));
+    geometry.reset(new PrimitivePlane(pos, norm));
+    }
+  else if (geometryType == PREFAB)
+    {
+    if (!prefabedGeometries)
+      return nullptr;
+    const int prefabID = geometryElement->IntAttribute(PREFABREF, -1);
+    const mathernogl::Matrix4 transform = getMatrixValue(doc, geometryElement->FirstChildElement(TRANSFORM));
+    if (prefabID >= 0 && prefabID < prefabedGeometries->size())
+      {
+      GeometryReference* geoRef = new GeometryReference(prefabedGeometries->at(prefabID));
+      geoRef->setTransform(transform);
+      geometry.reset(geoRef);
+      }
+    }
+  else if (geometryType == MESH)
+    {
+    const string filePath = getStringAttribute(geometryElement, FILE_PATH);
+    if (!filePath.empty())
+      {
+      Mesh* mesh = new Mesh(filePath);
+      mesh->ensureNormalsNormalised();
+      mesh->setSmoothShading(geometryElement->BoolAttribute(SMOOTHSHADING, false));
+      geometry.reset(mesh);
+      }
+    }
+  return geometry;
+  }
+
 static void loadGeometries(XMLDocument& doc, XMLElement* geometriesElement, std::map<uint, GeometryPtr>* prefabedGeometries,
                            std::map<uint, ShaderPtr>* shaders, AddGeometryFunc addGeometryFunc)
   {
@@ -273,47 +329,9 @@ static void loadGeometries(XMLDocument& doc, XMLElement* geometriesElement, std:
         geoSet->push_back(geometry);
         });
       }
-    else if (geometryType == SPHERE)
+    else
       {
-      const float radius = geometryElement->FloatAttribute(RADIUS, 1);
-      const Vector3D centre = getVector3DValue(doc, geometryElement->FirstChildElement(POSITION));
-      geometry.reset(new PrimitiveSphere(centre, radius));
-      }
-    else if (geometryType == AABOX)
-      {
-      const Vector3D lb = getVector3DValue(doc, geometryElement->FirstChildElement(LOWERBOUND));
-      const Vector3D ub = getVector3DValue(doc, geometryElement->FirstChildElement(UPPERBOUND));
-      geometry.reset(new PrimitiveBoxAA(lb, ub));
-      }
-    else if (geometryType == PLANE)
-      {
-      const Vector3D pos = getVector3DValue(doc, geometryElement->FirstChildElement(POSITION));
-      const Vector3D norm = getVector3DValue(doc, geometryElement->FirstChildElement(NORMAL));
-      geometry.reset(new PrimitivePlane(pos, norm));
-      }
-    else if (geometryType == PREFAB)
-      {
-      if (!prefabedGeometries)
-        return;
-      const int prefabID = geometryElement->IntAttribute(PREFABREF, -1);
-      const mathernogl::Matrix4 transform = getMatrixValue(doc, geometryElement->FirstChildElement(TRANSFORM));
-      if (prefabID >= 0 && prefabID < prefabedGeometries->size())
-        {
-        GeometryReference* geoRef = new GeometryReference(prefabedGeometries->at(prefabID));
-        geoRef->setTransform(transform);
-        geometry.reset(geoRef);
-        }
-      }
-    else if (geometryType == MESH)
-      {
-      const string filePath = getStringAttribute(geometryElement, FILE_PATH);
-      if (!filePath.empty())
-        {
-        Mesh* mesh = new Mesh(filePath);
-        mesh->ensureNormalsNormalised();
-        mesh->setSmoothShading(geometryElement->BoolAttribute(SMOOTHSHADING, false));
-        geometry.reset(mesh);
-        }
+      geometry = loadSingularGeometry(doc, geometryElement, prefabedGeometries);
       }
 
     if (geometry)
@@ -360,6 +378,28 @@ static void loadLightSources(XMLDocument& doc, XMLElement* lightSourcesElement, 
       float radius = lightElement->FloatAttribute(RADIUS, 3);
       float falloff = lightElement->FloatAttribute(FALLOFF, 1);
       lightSource.reset(new PointLight(colour, position, radius, falloff));
+      }
+    else if (lightSourceType == AREA_LIGHT)
+      {
+      Vector3D colour = getVector3DValue(doc, lightElement->FirstChildElement(COLOUR));
+      float radius = lightElement->FloatAttribute(RADIUS, 3);
+      float falloff = lightElement->FloatAttribute(FALLOFF, 1);
+
+      XMLElement* lightGeometryElement = lightElement->FirstChildElement(GEOMETRY);
+      if (lightGeometryElement)
+        {
+        GeometryPtr geometry = loadSingularGeometry(doc, lightGeometryElement->FirstChildElement(), nullptr);
+        if (geometry)
+          {
+          geometry->setMaterial(ShaderPtr(new EmissionShader(colour)));
+          AreaLight* areaLight = new AreaLight(geometry);
+          areaLight->setColour(colour);
+          areaLight->setRadius(radius);
+          areaLight->setFallOffExp(falloff);
+          lightSource.reset(areaLight);
+          }
+        scene->getSceneDef()->geometries.push_back(geometry);
+        }
       }
 
     if (lightSource)

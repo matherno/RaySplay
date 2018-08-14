@@ -59,6 +59,19 @@ void SampleGenerator::generateUnitHemisphereSamples(float distributionExp) {
   }
 }
 
+void SampleGenerator::generateUnitSphereSamples()
+  {
+  sphereMapSamples.clear();
+  sphereMapSamples.reserve((unsigned long)numSamples * numSampleSets);
+  Vector2D sample;
+  for(int sampleNum = 0; sampleNum < squareMapSamples.size(); ++sampleNum) {
+    sample = squareMapSamples[sampleNum];
+    float theta = (float) (2.0*M_PI*sample.x);
+    float phi = (float) acos(2.0*sample.y - 1);
+    sphereMapSamples.emplace_back(sinf(theta)*cosf(phi), sinf(theta)*sinf(phi), cosf(theta));
+    }
+  }
+
 std::shared_ptr<SampleSet> SampleGenerator::getSampleSet(SampleMapType sampleMapType){
   ASSERT(!squareMapSamples.empty(), "Haven't generated any samples for this sample generator! ");
 
@@ -67,6 +80,9 @@ std::shared_ptr<SampleSet> SampleGenerator::getSampleSet(SampleMapType sampleMap
   }
   else if (sampleMapType == unitHemisphereMap){
     ASSERT(!hemisphereMapSamples.empty(), "Haven't generated hemisphere map samples! ");
+  }
+  else if (sampleMapType == unitSphereMap){
+    ASSERT(!sphereMapSamples.empty(), "Haven't generated sphere map samples! ");
   }
 
   if(activeSampleSet)
@@ -89,6 +105,9 @@ bool SampleGenerator::getSample(SampleSet* sampleSet, Vector3D* sample, SampleMa
     case unitHemisphereMap:
       *sample = hemisphereMapSamples[sampleIndex];
       break;
+    case unitSphereMap:
+      *sample = sphereMapSamples[sampleIndex];
+      break;
     default:
       ASSERT(false, "What type of sample map is this? " + std::to_string((int)sampleMapType))
       break;
@@ -98,4 +117,19 @@ bool SampleGenerator::getSample(SampleSet* sampleSet, Vector3D* sample, SampleMa
 }
 
 
+void ContinousSamplerHelper::initialise(std::shared_ptr<SampleGenerator> generator, SampleGenerator::SampleMapType sampleType)
+  {
+  this->generator = generator;
+  this->sampleType = sampleType;
+  currentSampleSet = nullptr;
+  }
 
+Vector3D ContinousSamplerHelper::getNextSample()
+  {
+  if (!currentSampleSet || !currentSampleSet->hasNext())
+    currentSampleSet = generator->getSampleSet(sampleType);
+  Vector3D sample;
+  if (currentSampleSet)
+    currentSampleSet->nextSample(&sample);
+  return sample;
+  }

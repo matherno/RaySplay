@@ -4,6 +4,7 @@
 //
 
 #include <mathernogl/MathernoGL.h>
+#include <SampleGenerator.h>
 #include "Geometry.h"
 
 
@@ -12,6 +13,7 @@ private:
   mathernogl::Vector3D centre;
   float radius;
   float radiusSquared;
+  ContinousSamplerHelper samplerHelper;
 
 public:
   PrimitiveSphere();
@@ -29,4 +31,9 @@ public:
   virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
   virtual bool hitTest(const Ray* ray, float* hitTValue) const override;
   virtual void constructBoundingBox() override;
-};
+
+  virtual bool getSurfaceSample(Vector3D* position, Vector3D* normal) override;
+
+protected:
+  void setupSurfaceSampler();
+  };

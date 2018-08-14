@@ -37,7 +37,7 @@ bool RayTracer::traceShadowRay(const Ray* ray, const SceneDef* sceneDef, float* 
   float testTValue;
   bool gotHit = false;
   for(GeometryPtr geometry : sceneDef->geometries){
-    if(geometry->hitTest(ray, &testTValue)){
+    if(geometry->canCastShadows() && geometry->hitTest(ray, &testTValue)){
       if(!gotHit || testTValue < *tHitValue){
         *tHitValue = testTValue;
         gotHit = true;

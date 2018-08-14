@@ -23,6 +23,8 @@ public:
   float getFallOffExp() const { return falloffExp; }
   void setPosition(const Vector3D& position);
   void setColour(const Vector3D& colour);
+  void setRadius(float radius) { this->radius = radius; }
+  void setFallOffExp(float exp) { this->falloffExp = exp; }
 
   virtual bool isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
   virtual Vector3D lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
