@@ -7,6 +7,7 @@
 #include "RaySplayConst.h"
 
 #define DEFAULT_NUM_SAMPLE_SETS 83
+#define DEFAULT_SQRT_NUM_SAMPLES 16
 
 class SampleSet;
 
@@ -37,7 +38,7 @@ public:
   const int numSampleSets;
   const int sqrtNumSamples;
 
-  SampleGenerator(int sqrtNumSamples, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS);
+  SampleGenerator(int sqrtNumSamples = DEFAULT_SQRT_NUM_SAMPLES, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS);
   virtual ~SampleGenerator(){};
 
   void generateUnitCircleSamples();

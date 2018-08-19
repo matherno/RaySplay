@@ -7,7 +7,7 @@
 
 class WhiteNoiseSampler : public SampleGenerator {
 public:
-  WhiteNoiseSampler(int sqrtNumSamples, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
+  WhiteNoiseSampler(int sqrtNumSamples = DEFAULT_SQRT_NUM_SAMPLES, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
     generateSampleSets();
   }
 
@@ -17,7 +17,7 @@ protected:
 
 class BlueNoiseSampler : public SampleGenerator {
 public:
-  BlueNoiseSampler(int sqrtNumSamples, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
+  BlueNoiseSampler(int sqrtNumSamples = DEFAULT_SQRT_NUM_SAMPLES, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
     generateSampleSets();
   }
 
@@ -27,7 +27,7 @@ protected:
 
 class RegularSampler : public SampleGenerator {
 public:
-  RegularSampler(int sqrtNumSamples, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
+  RegularSampler(int sqrtNumSamples = DEFAULT_SQRT_NUM_SAMPLES, int numSampleSets = DEFAULT_NUM_SAMPLE_SETS) : SampleGenerator(sqrtNumSamples, numSampleSets) {
     generateSampleSets();
   }
 

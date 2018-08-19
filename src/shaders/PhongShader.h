@@ -6,6 +6,7 @@
 
 #include <Shader.h>
 #include <Texture.h>
+#include <LightScatteringFunctions.h>
 
 class PhongShader : public Shader {
 private:
@@ -14,6 +15,8 @@ private:
   float specularExp = 25;
   bool blinnPhong = true;
   TexturePtr diffuseTexture;
+  std::unique_ptr<LightScatterBase> diffuseScatterer;
+  std::unique_ptr<LightScatterBase> specularScatterer;
 
 public:
   PhongShader();
@@ -36,4 +39,5 @@ public:
 
 protected:
   Vector3D getDiffuseColour(const SurfaceInfo* surfaceInfo) const;
+  void setupScatterers();
 };

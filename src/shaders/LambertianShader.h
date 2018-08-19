@@ -6,10 +6,13 @@
 
 #include <Shader.h>
 #include <Texture.h>
+#include <SampleGenerator.h>
+#include <LightScatteringFunctions.h>
 
 class LambertianShader : public Shader {
   Vector3D diffuseColour;
   TexturePtr diffuseTexture;
+  LightScatterDiffuse diffuseScatterer;
 
 public:
   LambertianShader();

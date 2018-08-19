@@ -85,6 +85,7 @@
 #define LOWERBOUND "LowerBound"
 #define UPPERBOUND "UpperBound"
 #define SMOOTHSHADING "SmoothShading"
+#define SCALE "Scale"
 
 
 using namespace tinyxml2;
@@ -169,12 +170,15 @@ std::shared_ptr<ObjMeshSet> SceneLoader::loadSceneFromOBJ(const std::string& fil
 static Vector3D getVector3DValue(XMLDocument& doc, XMLElement* parent)
   {
   Vector3D value;
+  double scale = 1;
   if (parent)
     {
     parent->QueryAttribute(VEC3D_X, &value.x);
     parent->QueryAttribute(VEC3D_Y, &value.y);
     parent->QueryAttribute(VEC3D_Z, &value.z);
+    parent->QueryAttribute(SCALE, &scale);
     }
+  value *= scale;
   return value;
   }
 

@@ -116,12 +116,12 @@ void Scene::paintPixel(uint x, uint y, const Vector3D& colour, ImageOutput* imag
   finalColour.x = pow(colour.x, viewDef.invGamma);
   finalColour.y = pow(colour.y, viewDef.invGamma);
   finalColour.z = pow(colour.z, viewDef.invGamma);
-//  float maxComponent = std::max(colour.x, std::max(colour.y, colour.z));
-//  if(maxComponent > 1.0){
-//    finalColour /= maxComponent;
-//  }
-  finalColour.x = mathernogl::clampd(finalColour.x, 0.0, 1.0);
-  finalColour.y = mathernogl::clampd(finalColour.y, 0.0, 1.0);
-  finalColour.z = mathernogl::clampd(finalColour.z, 0.0, 1.0);
+  double maxComponent = std::max(colour.x, std::max(colour.y, colour.z));
+  if(maxComponent > 1.0){
+    finalColour /= maxComponent;
+  }
+//  finalColour.x = mathernogl::clampd(finalColour.x, 0.0, 1.0);
+//  finalColour.y = mathernogl::clampd(finalColour.y, 0.0, 1.0);
+//  finalColour.z = mathernogl::clampd(finalColour.z, 0.0, 1.0);
   imageOutput->paintPixel(x, y, finalColour);
 }

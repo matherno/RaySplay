@@ -10,7 +10,7 @@ class ReflectionShader : public PhongShader {
 private:
   Vector3D mirrorCol;
   bool isPerfectReflection = true;
-  ContinousSamplerHelper samplerHelper;
+  std::unique_ptr<LightScatterBase> reflectiveScatterer;
   float fuzziness = 0;
 
 public:
@@ -37,5 +37,5 @@ protected:
    */
   Vector3D calcReflectedLight(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef);
 
-  void initSampler(uint sqrtNumSamples = 2);
+  void setupScatterer();
 };
