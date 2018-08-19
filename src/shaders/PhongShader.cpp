@@ -1,6 +1,6 @@
 //
 // Created by matherno on 12/08/17.
-/separatinge "PhongShader.h"
+#include "PhongShader.h"
 
 PhongShader::PhongShader(const Vector3D& diffuseColour, const Vector3D& specularColour, float specularExp, bool blinnPhong /*= true*/)
     : diffuseColour(diffuseColour), specularColour(specularColour), specularExp(specularExp), blinnPhong(blinnPhong)
