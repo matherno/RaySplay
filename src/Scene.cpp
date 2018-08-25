@@ -116,7 +116,7 @@ void Scene::paintPixel(uint x, uint y, const Vector3D& colour, ImageOutput* imag
   finalColour.x = pow(colour.x, viewDef.invGamma);
   finalColour.y = pow(colour.y, viewDef.invGamma);
   finalColour.z = pow(colour.z, viewDef.invGamma);
-  double maxComponent = std::max(colour.x, std::max(colour.y, colour.z));
+  double maxComponent = std::max(finalColour.x, std::max(finalColour.y, finalColour.z));
   if(maxComponent > 1.0){
     finalColour /= maxComponent;
   }

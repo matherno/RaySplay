@@ -22,6 +22,8 @@ PhongShader::PhongShader()
 Vector3D PhongShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef)
   {
   Vector3D finalColour(0);
+  const Vector3D viewDir = hitRay->direction * -1;
+  const Vector3D diffuseCol = getDiffuseColour(surfaceInfo);
   for(LightSourcePtr light : sceneDef->lights)
     {
     if(light->startShadingAtPoint(surfaceInfo, sceneDef) && !light->isPointInShadow(surfaceInfo, sceneDef))
@@ -29,14 +31,14 @@ Vector3D PhongShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surface
       const Vector3D lightIntensity = light->lightIntensityAtPoint(surfaceInfo, sceneDef);
       if(light->isAmbient())
         {
-        finalColour += getDiffuseColour(surfaceInfo) * lightIntensity;
+        finalColour += diffuseCol * lightIntensity;
         }
       else
         {
         const Vector3D lightDir = light->lightDirectionAtPoint(surfaceInfo, sceneDef);
-        const Vector3D diffuseLight = lightIntensity * diffuseScatterer->getSurfaceRadianceFactor(surfaceInfo->normal, hitRay->direction * -1, lightDir);
-        const Vector3D specularLight = lightIntensity * specularScatterer->getSurfaceRadianceFactor(surfaceInfo->normal, hitRay->direction * -1, lightDir);
-        finalColour += (getDiffuseColour(surfaceInfo) * diffuseLight) + (specularColour * specularLight);
+        const Vector3D diffuseLight = lightIntensity * diffuseScatterer->getSurfaceRadianceFactor(surfaceInfo->normal, viewDir, lightDir);
+        const Vector3D specularLight = lightIntensity * specularScatterer->getSurfaceRadianceFactor(surfaceInfo->normal, viewDir, lightDir);
+        finalColour += (diffuseCol * diffuseLight) + (specularColour * specularLight);
         }
       }
     }

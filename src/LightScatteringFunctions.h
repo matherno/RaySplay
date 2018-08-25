@@ -11,13 +11,13 @@ public:
    *  obtains the factor of light irradiated from the given light direction, that is radiated in the given view direction
    *  directions are described from surface point
    */
-  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& viewDir, const Vector3D& lightDir) = 0;
+  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) = 0;
 
   /*
    *  obtains a random sample of incoming light direction, when looking at a surface from a given view direction
    *  directions are described from surface point
    */
-  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& viewDir) = 0;
+  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) = 0;
   };
 
 
@@ -28,9 +28,9 @@ private:
 
 public:
   LightScatterDiffuse();
-  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& viewDir, const Vector3D& lightDir) override;
-  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& viewDir) override;
-  double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& lightDir);
+  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) override;
+  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) override;
+  double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToLight);
   };
 
 
@@ -42,14 +42,14 @@ private:
 
 public:
   LightScatterSpecular(double cosineExp);
-  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& viewDir, const Vector3D& lightDir) override;
-  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& viewDir) override;
+  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) override;
+  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) override;
   };
 
 
 class LightScatterPerfectSpecular : public LightScatterBase
   {
 public:
-  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& viewDir, const Vector3D& lightDir) override;
-  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& viewDir) override;
+  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) override;
+  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) override;
   };

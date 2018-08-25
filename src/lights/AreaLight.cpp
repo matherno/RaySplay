@@ -33,7 +33,7 @@ bool AreaLight::isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* 
 Vector3D AreaLight::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef)
   {
   Vector3D intensity = PointLight::lightIntensityAtPoint(surfaceInfo, sceneDef);
-  intensity *= std::max(mathernogl::dotProduct(surfaceInfo->normal, currentSampleNorm), 0.0);
+//  intensity *= std::max(mathernogl::dotProduct(surfaceInfo->normal, currentSampleNorm), 0.0);
   return intensity;
   }
 
