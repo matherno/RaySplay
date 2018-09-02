@@ -193,7 +193,12 @@ void RSMainFrame::onSave(wxCommandEvent& event)
   if (isRendering() || imageData.empty())
     return;
 
-  string imageFilePath = "Output.png";
+  string inputFilePath = "";
+  wxFilePickerCtrl* inputFilePicker = dynamic_cast<wxFilePickerCtrl*>(FindWindowById(ID_INPUTFILE));
+  if (inputFilePicker)
+    inputFilePath = inputFilePicker->GetFileName().GetName();
+
+  string imageFilePath = mathernogl::removeFileExtension(inputFilePath) + ".png";
   ImageOutputFile imageFileHandler(imageFilePath);
   imageFileHandler.prepare(imageWidth, imageHeight);
   for (int col = 0; col < imageWidth; ++col)
