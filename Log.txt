@@ -1,29 +1,52 @@
-MathernoGL Log: Mon Jul 23 18:23:21 2018
-Generating Image: 0.000000% 
-Generating Image: 3.055556% 
-Generating Image: 6.111111% 
-Generating Image: 9.166667% 
-Generating Image: 12.222222% 
-Generating Image: 15.277778% 
-Generating Image: 18.333334% 
-Generating Image: 21.388889% 
-Generating Image: 24.444445% 
-Generating Image: 27.500000% 
-Generating Image: 30.555555% 
-Generating Image: 33.611111% 
-Generating Image: 36.666668% 
-Generating Image: 39.722221% 
-Generating Image: 42.777779% 
-Generating Image: 45.833336% 
-Generating Image: 48.888889% 
-Generating Image: 51.944447% 
-Generating Image: 55.000000% 
-Generating Image: 58.055557% 
-Generating Image: 61.111111% 
-Generating Image: 64.166664% 
-Generating Image: 67.222221% 
-Generating Image: 70.277779% 
-Generating Image: 73.333336% 
-Generating Image: 76.388893% 
-Generating Image: 79.444443% 
-Generating Image: 82.500000% 
+MathernoGL Log: Sun Sep  2 19:54:15 2018
+Starting Image Render...
+Threads: 4
+Width: 960
+Height: 539
+Samples Per Pixel: 1
+Draft Mode: 1
+Generating Image: 7.421150% 
+Generating Image: 14.842300% 
+Generating Image: 22.263451% 
+Generating Image: 29.684601% 
+Generating Image: 37.105751% 
+Generating Image: 44.526901% 
+Generating Image: 51.948051% 
+Generating Image: 59.369202% 
+Generating Image: 66.790352% 
+Generating Image: 74.211502% 
+Generating Image: 81.632652% 
+Starting Image Render...
+Threads: 4
+Width: 1920
+Height: 1080
+Samples Per Pixel: 256
+Draft Mode: 0
+Generating Image: 3.703704% 
+Generating Image: 7.407407% 
+Generating Image: 11.111112% 
+Generating Image: 14.814815% 
+Generating Image: 18.518518% 
+Generating Image: 22.222223% 
+Generating Image: 25.925926% 
+Generating Image: 29.629629% 
+Generating Image: 33.333336% 
+Generating Image: 37.037037% 
+Generating Image: 40.740742% 
+Generating Image: 44.444447% 
+Generating Image: 48.148148% 
+Generating Image: 51.851852% 
+Generating Image: 55.555557% 
+Generating Image: 59.259258% 
+Generating Image: 62.962959% 
+Generating Image: 66.666672% 
+Generating Image: 70.370369% 
+Generating Image: 74.074074% 
+Generating Image: 77.777779% 
+Generating Image: 81.481483% 
+Generating Image: 85.185188% 
+Generating Image: 88.888893% 
+Generating Image: 92.592590% 
+Generating Image: 96.296295% 
+Generating Image: 100.000000% 
+Finished Image in 16 minutes 

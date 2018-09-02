@@ -73,6 +73,7 @@ void SampleGenerator::generateUnitSphereSamples()
   }
 
 std::shared_ptr<SampleSet> SampleGenerator::getSampleSet(SampleMapType sampleMapType){
+  std::lock_guard<std::mutex> lockGuard(mutex);
   ASSERT(!squareMapSamples.empty(), "Haven't generated any samples for this sample generator! ");
 
   if(sampleMapType == unitCircleMap){
@@ -126,6 +127,7 @@ void ContinousSamplerHelper::initialise(std::shared_ptr<SampleGenerator> generat
 
 Vector3D ContinousSamplerHelper::getNextSample()
   {
+  std::lock_guard<std::mutex> lockGuard(mutex);
   if (!currentSampleSet || !currentSampleSet->hasNext())
     currentSampleSet = generator->getSampleSet(sampleType);
   Vector3D sample;

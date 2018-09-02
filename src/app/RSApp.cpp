@@ -6,6 +6,7 @@
 #include "RSApp.h"
 #include <wx/filepicker.h>
 #include <ImageOutputFile.h>
+#include <thread>
 
 #define IMAGE_PANEL_SIZE wxSize(1366, 768)
 #define CONTROL_PANEL_SIZE wxSize(IMAGE_PANEL_SIZE.x, 60)
@@ -72,7 +73,12 @@ void RSMainFrame::createControls()
   checkBox->SetValue(true);
   controlPanelSizer->Add(checkBox, 0, wxALIGN_CENTRE_VERTICAL);
 
-  controlPanelSizer->AddSpacer(400);
+  controlPanelSizer->AddSpacer(20);
+  controlPanelSizer->Add(new wxStaticText(sidePanel, -1, "Threads"), 0, wxALIGN_CENTRE_VERTICAL);
+  controlPanelSizer->AddSpacer(10);
+  controlPanelSizer->Add(new wxTextCtrl(sidePanel, ID_NUMTHREADS, "4", wxDefaultPosition, wxSize(40, -1)), 0, wxALIGN_CENTRE_VERTICAL);
+
+  controlPanelSizer->AddSpacer(250);
   controlPanelSizer->Add(new wxButton(sidePanel, ID_SAVE, "Save Image"), 0, wxALIGN_CENTRE_VERTICAL);
 
   sidePanel->SetSizer(controlPanelSizer);
@@ -84,53 +90,84 @@ void RSMainFrame::onRender(wxCommandEvent& event)
   if (rendering)
     return;
 
-  cancelRender = false;
-  Scene scene;
-
   string inputFilePath = "";
   wxFilePickerCtrl* inputFilePicker = dynamic_cast<wxFilePickerCtrl*>(FindWindowById(ID_INPUTFILE));
   if (inputFilePicker)
     inputFilePath = inputFilePicker->GetPath();
 
+  int numThreads = 4;
+  wxTextCtrl* numThreadsCtrl = dynamic_cast<wxTextCtrl*>(FindWindowById(ID_NUMTHREADS));
+  if (numThreadsCtrl)
+    numThreads = atoi(numThreadsCtrl->GetValue());
+  numThreads = mathernogl::clampi(numThreads, 1, 16);
 
-  if (scene.build(inputFilePath))
+  wxCheckBox* draftBool = dynamic_cast<wxCheckBox*>(FindWindowById(ID_DRAFTBOOL));
+  bool draftMode = false;
+  if (draftBool)
+   draftMode = draftBool->GetValue();
+
+  const long startTime = mathernogl::getTimeMS();
+  bool renderSuccess = false;
+  setRendering(true);
+  cancelRender = false;
+  progressString = "Rendering... 0%";
+
+  std::thread thread([&renderSuccess, inputFilePath, draftMode, numThreads, this]()
     {
-    wxCheckBox* draftBool = dynamic_cast<wxCheckBox*>(FindWindowById(ID_DRAFTBOOL));
-    bool draftMode = false;
-    if (draftBool)
-      draftMode = draftBool->GetValue();
-
-    if (draftMode)
+    Scene scene((uint)numThreads);
+    if (scene.build(inputFilePath))
       {
-      scene.getViewDef()->width = 1280;
-      scene.getViewDef()->height = 720;
-      scene.getViewDef()->draftMode = true;
-      scene.getViewDef()->antiAliasingDegree = 1;
-      scene.getSceneDef()->disableAmbientOcclusion = true;
+      if (draftMode)
+       {
+       double aspectRatio = scene.getViewDef()->getAspectRatio();
+       scene.getViewDef()->width = (uint) ((1500.0 * aspectRatio) / (aspectRatio + 1.0));
+       scene.getViewDef()->height = (uint) (scene.getViewDef()->width / aspectRatio);
+       scene.getViewDef()->draftMode = true;
+       scene.getViewDef()->antiAliasingDegree = 1;
+       scene.getSceneDef()->maxRayDepth = 2;
+       }
+
+      scene.render(this);
+      renderSuccess = true;
       }
+    setRendering(false);
+    });
 
-    long startTime = mathernogl::getTimeMS();
-    SetStatusText("Rendering... 0%");
-    rendering = true;
-    scene.render(this);
-    rendering = false;
-
-    if (cancelRender)
+  const static long updateTime = 2000;
+  long lastUpdateTime = startTime;
+  while (isRendering() && !cancelRender)
+    {
+    const long currentTime = mathernogl::getTimeMS();
+    if (currentTime - lastUpdateTime > updateTime)
       {
-      SetStatusText("Cancelled rendering");
+      lastUpdateTime = currentTime;
+      refreshImage();
+      SetStatusText(progressString);
       }
-    else
+    wxYield();
+    }
+
+  thread.join();
+
+  if (cancelRender)
+    {
+    SetStatusText("Cancelled rendering");
+    }
+  else
+    {
+    if (renderSuccess)
       {
+      refreshImage();
       float duration = (float)(mathernogl::getTimeMS() - startTime) / 1000;
-      if (duration < 60)
+      if (duration < 4 * 60)
         SetStatusText("Finished rendering in " + std::to_string(duration) + " seconds");
       else
         SetStatusText("Finished rendering in " + std::to_string(int(duration / 60)) + " minutes");
       }
-    }
-  else
-    {
-    SetStatusText("Failed to load scene!");
+    else
+      {
+      SetStatusText("Failed to load scene!");
+      }
     }
   }
 
@@ -143,15 +180,17 @@ void RSMainFrame::refreshImage()
   {
   if (imagePanel)
     {
+    imageDataMutex.lock();
     imagePanel->loadImage(imageWidth, imageHeight, imageData.data());
     imagePanel->Refresh();
+    imageDataMutex.unlock();
     }
   }
 
 static const int imageBPP = 3;
 void RSMainFrame::onSave(wxCommandEvent& event)
   {
-  if (rendering || imageData.empty())
+  if (isRendering() || imageData.empty())
     return;
 
   string imageFilePath = "Output.png";
@@ -181,31 +220,28 @@ void RSMainFrame::onSave(wxCommandEvent& event)
 
 bool RSMainFrame::prepare(uint imageWidth, uint imageHeight)
   {
+  imageDataMutex.lock();
   this->imageWidth = imageWidth;
   this->imageHeight = imageHeight;
   imageData.clear();
   imageData.resize(imageWidth * imageHeight * imageBPP);
   std::fill(imageData.begin(), imageData.end(), (mathernogl::byte) 0);
-  refreshImage();
+  imageDataMutex.unlock();
   return true;
   }
 
 void RSMainFrame::paintPixel(uint x, uint y, const Vector3D& colour)
   {
+  imageDataMutex.lock();
   const int redIndex = imageBPP * (x + y * imageWidth);
   imageData[redIndex] = mathernogl::byte(colour.x * 255);
   imageData[redIndex+1] = mathernogl::byte(colour.y * 255);
   imageData[redIndex+2] = mathernogl::byte(colour.z * 255);
-
-  if (x == 0 && y % 20 == 0 && imagePanel)
-    refreshImage();
-
-  wxYield();
+  imageDataMutex.unlock();
   }
 
 bool RSMainFrame::finalise()
   {
-  refreshImage();
   return false;
   }
 
@@ -216,7 +252,22 @@ bool RSMainFrame::queryBail()
 
 void RSMainFrame::updateProgress(float percent)
   {
-  SetStatusText(mathernogl::stringFormat("Rendering... %0.2f%%", percent));
+  progressString = mathernogl::stringFormat("Rendering... %0.2f%%", percent);
+  }
+
+void RSMainFrame::setRendering(bool rendering)
+  {
+  renderingMutex.lock();
+  this->rendering = rendering;
+  renderingMutex.unlock();
+  }
+
+bool RSMainFrame::isRendering()
+  {
+  renderingMutex.lock();
+  bool res = rendering;
+  renderingMutex.unlock();
+  return res;
   }
 
 /*

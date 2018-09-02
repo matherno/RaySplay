@@ -5,17 +5,14 @@
 #include "Samplers.h"
 
 #include <random>
-#include "RaySplayConst.h"
 
-int shuffleRand(int n) {
-  return std::rand() % n;
-}
 
 /*
  *  Essentially shuffles the src list, and appends it to the back of the target
  */
-
-void shuffleAndAppend(std::vector<Vector2D>* src, std::vector<Vector2D>* target) {
+static std::mutex mutex;
+static void shuffleAndAppend(std::vector<Vector2D>* src, std::vector<Vector2D>* target) {
+  std::lock_guard<std::mutex> lockGuard(mutex);
   std::shuffle(src->begin(), src->end(), std::mt19937(std::random_device()()));
   target->insert(target->end(), src->begin(), src->end());
 }

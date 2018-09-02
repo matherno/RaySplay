@@ -4,6 +4,7 @@
 //
 
 #include <mathernogl/MathernoGL.h>
+#include <mutex>
 #include "RaySplayConst.h"
 
 #define DEFAULT_NUM_SAMPLE_SETS 83
@@ -26,6 +27,7 @@ public:
 
 private:
   SampleSetPtr activeSampleSet;
+  std::mutex mutex;
 
 protected:
   std::vector<mathernogl::Vector2D> squareMapSamples;       //  unit square (0,0) -> (1,1), any point inside
@@ -80,6 +82,7 @@ private:
   std::shared_ptr<SampleGenerator> generator;
   SampleSetPtr currentSampleSet;
   SampleGenerator::SampleMapType sampleType;
+  std::mutex mutex;
 
 public:
   void initialise(std::shared_ptr<SampleGenerator> generator, SampleGenerator::SampleMapType sampleType);

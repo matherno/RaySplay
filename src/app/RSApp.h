@@ -11,6 +11,7 @@ enum RSControlID
   ID_INPUTFILE,
   ID_DRAFTBOOL,
   ID_SAVE,
+  ID_NUMTHREADS,
   };
 
 #define COLOUR_LIGHT_GREY   wxColor(160, 160, 160)
@@ -21,10 +22,13 @@ class RSMainFrame : public wxFrame, public ImageOutput
   {
 private:
   std::vector<mathernogl::byte> imageData;
+  std::mutex imageDataMutex;
   uint imageWidth = 0, imageHeight = 0;
   bool cancelRender = false;
   bool rendering = false;
+  std::mutex renderingMutex;
   RSImagePanel* imagePanel = nullptr;
+  string progressString = "";
 
 public:
   RSMainFrame();
@@ -44,6 +48,8 @@ private:
   void onCancel(wxCommandEvent& event);
   void onSave(wxCommandEvent& event);
   void refreshImage();
+  bool isRendering();
+  void setRendering(bool rendering);
 
   wxDECLARE_EVENT_TABLE();
   };

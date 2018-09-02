@@ -23,9 +23,10 @@ private:
   SceneDef sceneDef;
   std::shared_ptr<Camera> camera;
   ResourceManager resourceManager;
+  uint numThreads = 4;
 
 public:
-  Scene();
+  Scene(uint numThreads = 4);
 
   bool build(string sceneXMLFilePath);
   void render(ImageOutput* imageOutput);
@@ -35,4 +36,7 @@ public:
   SceneDef* getSceneDef(){ return &sceneDef; }
   void setCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
   std::shared_ptr<Camera>& getCamera() { return camera; }
+
+protected:
+  void renderPixels(uint rowStart, uint rowEnd, std::vector<Vector3D>* pixels, std::function<bool()> queryBailFunc);
 };

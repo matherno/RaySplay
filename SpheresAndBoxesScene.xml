@@ -1,5 +1,5 @@
 <RaySplayScene TimeSaved="15/07/2018 15:52:51" Version="1">
-    <ViewDefinition Width="1920" Height="1080" FOV="1.13" AntiAliasingDegree="3" InvGamma="0.5"/>
+    <ViewDefinition Width="1920" Height="1080" FOV="1.13" AntiAliasingDegree="16" InvGamma="0.5"/>
     <CameraPerspective ViewPlaneOffset="2">
         <Position X="-13.800000000000001" Y="5.5" Z="45"/>
         <ViewDir X="0.35999999999999999" Y="-0.10000000000000001" Z="-1"/>
@@ -63,17 +63,17 @@
         <Lambertian ID="3">
             <Colour X="0.40000000596046448" Y="0.10000000149011612" Z="0.10000000149011612"/>
         </Lambertian>
-        <Reflection Exp="1" Fuzziness="0.15000001" ID="4">
+        <Reflection Exp="1" Fuzziness="0.00005" ID="4">
             <Colour X="0.20000000000000001" Y="0.20000000000000001" Z="0.20000000000000001"/>
             <Specular X="0.20000000000000001" Y="0.20000000000000001" Z="0.20000000000000001"/>
             <MirrorColour X="1" Y="1" Z="1"/>
         </Reflection>
-        <Reflection Exp="10" Fuzziness="0" ID="5">
-            <Colour X="0.80000000000000004" Y="0" Z="0"/>
-            <Specular X="0.29999999999999999" Y="0.29999999999999999" Z="0.29999999999999999"/>
+        <Reflection Exp="50" Fuzziness="0" ID="5">
+            <Colour X="0.8" Y="0" Z="0"/>
+            <Specular X="1" Y="1" Z="1" Scale="1"/>
             <MirrorColour X="1" Y="0" Z="1"/>
         </Reflection>
-        <Reflection Exp="30" Fuzziness="0.80000001" ID="6">
+        <Reflection Exp="30" Fuzziness="0.1" ID="6">
             <Colour X="0.69999999999999996" Y="0.20000000000000001" Z="0"/>
             <Specular X="0.29999999999999999" Y="0.10000000000000001" Z="0.10000000000000001"/>
             <MirrorColour X="0.5" Y="0.5" Z="0.5"/>
@@ -94,12 +94,20 @@
         </Lambertian>
     </Materials>
     <Lights>
-        <AmbientOcclusion Radius="2" SqrtNumSamples="5">
+        <AmbientOcclusion Radius="2">
             <Colour X="0.02" Y="0.02" Z="0.02"/>
         </AmbientOcclusion>
-        <PointLight Radius="30" Falloff="2">
-            <Colour X="0.59999999999999998" Y="0.59999999999999998" Z="0.59999999999999998"/>
+       <!--  <PointLight Radius="30" Falloff="2">
+            <Colour X="0.6" Y="0.6" Z="0.6"/>
             <Position X="-10" Y="10" Z="15"/>
-        </PointLight>
+        </PointLight> -->
+        <AreaLight Radius="30" Falloff="2">
+            <Colour X="0.6" Y="0.6" Z="0.6" Scale="1"/>
+            <Geometry>
+                <Sphere Radius="2">
+                    <Position X="-10" Y="10" Z="15"/>
+                </Sphere>
+            </Geometry>
+        </AreaLight>
     </Lights>
 </RaySplayScene>
