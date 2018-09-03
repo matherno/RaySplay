@@ -6,7 +6,7 @@
 
 #include <mathernogl/MathernoGL.h>
 
-#define EPSILON 1e-2
+#define EPSILON 1e-5
 
 #define RAND_INT(min,max)     mathernogl::RandomGenerator::randomInt(min,max)
 #define RAND_FLOAT(min,max)   mathernogl::RandomGenerator::randomFloat(min,max)
