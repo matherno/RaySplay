@@ -14,6 +14,18 @@ PhongShader::PhongShader(TexturePtr diffuseTexture, const Vector3D& specularColo
   setupScatterers();
   }
 
+PhongShader::PhongShader(double diffuseR, double diffuseG, double diffuseB)
+  : PhongShader(Vector3D(diffuseR, diffuseG, diffuseB))
+  {
+
+  }
+
+PhongShader::PhongShader(const Vector3D& diffuseColour)
+  : PhongShader(diffuseColour, Vector3D(0, 0, 0), 0)
+  {
+
+  }
+
 PhongShader::PhongShader()
   {
   setupScatterers();
@@ -93,3 +105,4 @@ void PhongShader::setupScatterers()
   diffuseScatterer.reset(new LightScatterDiffuse());
   specularScatterer.reset(new LightScatterSpecular(specularExp));
   }
+

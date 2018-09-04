@@ -20,6 +20,8 @@ private:
 
 public:
   PhongShader();
+  PhongShader(double diffuseR, double diffuseG, double diffuseB);
+  PhongShader(const Vector3D& diffuseColour);
   PhongShader(const Vector3D& diffuseColour, const Vector3D& specularColour, float specularExp, bool blinnPhong = true);
   PhongShader(TexturePtr diffuseTexture, const Vector3D& specularColour, float specularExp, bool blinnPhong = true);
 

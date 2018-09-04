@@ -4,7 +4,6 @@
 
 #include <geometries/Mesh.h>
 #include <shaders/PhongShader.h>
-#include <shaders/LambertianShader.h>
 #include <cameras/CameraPerspective.h>
 #include <cameras/CameraOrthographic.h>
 #include <geometries/PrimitiveBoxAA.h>
@@ -112,7 +111,7 @@ std::shared_ptr<ObjMeshSet> SceneLoader::loadSceneFromOBJ(const std::string& fil
     phongShader = new PhongShader(diffuse, specular, specularExp);
     shaders.push_back(ShaderPtr(phongShader));
     }
-  ShaderPtr defaultShader(new LambertianShader(0, 0, 0));
+  ShaderPtr defaultShader(new PhongShader(0, 0, 0));
 
   std::shared_ptr<Mesh> meshObject;
   for(int shapeNum = 0; shapeNum < shapes.size(); ++shapeNum)
@@ -215,7 +214,7 @@ static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::m
     if (geometryType == LAMBERTIAN)
       {
       const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
-      shader.reset(new LambertianShader(colour));
+      shader.reset(new PhongShader(colour));
       }
     else if (geometryType == PHONG)
       {
@@ -718,12 +717,7 @@ static void saveMaterial(XMLDocument& doc, XMLElement* materialsElement, Shader*
   {
   XMLElement* element = nullptr;
 
-  if (LambertianShader* shader = dynamic_cast<LambertianShader*>(materialShader))
-    {
-    element = createElement(doc, materialsElement, LAMBERTIAN);
-    setVector3DValue(doc, createElement(doc, element, COLOUR), shader->getDiffuseColour());
-    }
-  else if (ReflectionShader* shader = dynamic_cast<ReflectionShader*>(materialShader))
+  if (ReflectionShader* shader = dynamic_cast<ReflectionShader*>(materialShader))
     {
     element = createElement(doc, materialsElement, REFLECTION);
     setVector3DValue(doc, createElement(doc, element, COLOUR), shader->getDiffuseColour());

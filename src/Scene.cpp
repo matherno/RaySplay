@@ -2,7 +2,6 @@
 // Created by matherno on 1/08/17.
 //
 
-#include <shaders/LambertianShader.h>
 #include <shaders/PhongShader.h>
 #include <lights/PointLight.h>
 #include <lights/AmbientOcclusion.h>
