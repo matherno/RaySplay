@@ -43,10 +43,10 @@ public:
 
   //  returns true if the given ray hits this geometry, within the given t value bounds
   //  if hits, fills in surfaceInfo with the relevant information
-  virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const = 0;
+  virtual bool hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const = 0;
 
   //  like hitTest but doesn't need surface properties, so should be more efficient if possible
-  virtual bool hitTest(const Ray* ray, float* hitTValue) const = 0;
+  virtual bool hitTest(const Ray* ray, double* hitTValue) const = 0;
 
   //  initialise this geometry object, including constructing its bounding box
   virtual void constructBoundingBox() = 0;

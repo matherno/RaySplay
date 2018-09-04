@@ -85,8 +85,8 @@ void Mesh::constructBoundingBox() {
   meshGrid.constructBoundingBox();
 }
 
-bool Mesh::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
-  float testTValue;
+bool Mesh::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
+  double testTValue;
   SurfaceInfo resultSurfaceInfo;
   if(surfaceInfo ? meshGrid.hitTest(ray, &testTValue, &resultSurfaceInfo) : meshGrid.hitTest(ray, &testTValue)){
     *hitTValue = testTValue;
@@ -97,7 +97,7 @@ bool Mesh::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) c
   return false;
 }
 
-bool Mesh::hitTest(const Ray* ray, float* hitTValue) const {
+bool Mesh::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

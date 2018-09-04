@@ -19,7 +19,6 @@ public:
   void setColour(const Vector3D& colour);
 
   bool isAmbient() override { return true; };
-  bool isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-  Vector3D lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-  Vector3D lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-};
+
+  virtual bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection) override;
+  };

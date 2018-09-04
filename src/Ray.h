@@ -27,11 +27,11 @@ struct Ray {
   Vector3D direction;
   int depth = 0;
 
-  Vector3D getPosition(float t) const { return origin + direction * t; }
+  Vector3D getPosition(double t) const { return origin + direction * t; }
 
-  static float projectPointOntoRay(const Ray* ray, Vector3D point){
+  static double projectPointOntoRay(const Ray* ray, Vector3D point){
     Vector3D rayOriginToPoint = point - ray->origin;
-    float cosAngle = mathernogl::dotProduct(rayOriginToPoint.getUniform(), ray->direction);
+    double cosAngle = mathernogl::dotProduct(rayOriginToPoint.getUniform(), ray->direction);
     return cosAngle * rayOriginToPoint.magnitude();
   }
 };

@@ -7,45 +7,45 @@
 /*
  *  Based on the algorithm presented by Kevin Suffern, in "Ray Tracing from the Ground Up", p362-367,
  */
-bool PrimitiveTriangleBase::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool PrimitiveTriangleBase::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   Vector3D cornerA, cornerB, cornerC;
   getCorners(&cornerA, &cornerB, &cornerC);
 
-  float a = cornerA.x - cornerB.x;
-  float b = cornerA.x - cornerC.x;
-  float c = ray->direction.x;
-  float d = cornerA.x - ray->origin.x;
-  float e = cornerA.y - cornerB.y;
-  float f = cornerA.y - cornerC.y;
-  float g = ray->direction.y;
-  float h = cornerA.y - ray->origin.y;
-  float i = cornerA.z - cornerB.z;
-  float j = cornerA.z - cornerC.z;
-  float k = ray->direction.z;
-  float l = cornerA.z - ray->origin.z;
+  double a = cornerA.x - cornerB.x;
+  double b = cornerA.x - cornerC.x;
+  double c = ray->direction.x;
+  double d = cornerA.x - ray->origin.x;
+  double e = cornerA.y - cornerB.y;
+  double f = cornerA.y - cornerC.y;
+  double g = ray->direction.y;
+  double h = cornerA.y - ray->origin.y;
+  double i = cornerA.z - cornerB.z;
+  double j = cornerA.z - cornerC.z;
+  double k = ray->direction.z;
+  double l = cornerA.z - ray->origin.z;
 
-  float m = f*k - g*j;
-  float n = h*k - g*l;
-  float p = f*l - h*j;
-  float q = g*i - e*k;
-  float s = e*j - f*i;
+  double m = f*k - g*j;
+  double n = h*k - g*l;
+  double p = f*l - h*j;
+  double q = g*i - e*k;
+  double s = e*j - f*i;
 
-  float invDenominator = 1.0f / (a*m + b*q + c*s);
-  float e1 = d*m - b*n - c*p;
-  float beta = e1 * invDenominator;
+  double invDenominator = 1.0f / (a*m + b*q + c*s);
+  double e1 = d*m - b*n - c*p;
+  double beta = e1 * invDenominator;
 
   if(beta < 0)
     return false;
 
-  float r = e*l - h*i;
-  float e2 = a*n + d*q + c*r;
-  float gamma = e2 * invDenominator;
+  double r = e*l - h*i;
+  double e2 = a*n + d*q + c*r;
+  double gamma = e2 * invDenominator;
 
   if(gamma < 0 || beta + gamma > 1)
     return false;
 
-  float e3 = a*p - b*r + d*s;
-  float tValue = e3 * invDenominator;
+  double e3 = a*p - b*r + d*s;
+  double tValue = e3 * invDenominator;
 
   if(tValue > EPSILON){
     *hitTValue = tValue;
@@ -61,7 +61,7 @@ bool PrimitiveTriangleBase::hitTest(const Ray* ray, float* hitTValue, SurfaceInf
   return false;
 }
 
-bool PrimitiveTriangleBase::hitTest(const Ray* ray, float* hitTValue) const {
+bool PrimitiveTriangleBase::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

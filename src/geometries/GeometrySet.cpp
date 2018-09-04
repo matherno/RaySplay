@@ -23,9 +23,9 @@ void GeometrySet::constructBoundingBox() {
   boundingBox->expandBounds();
 }
 
-bool GeometrySet::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool GeometrySet::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   bool gotHit = false;
-  float testTValue;
+  double testTValue;
   SurfaceInfo testSurfaceInfo;
 
   for (GeometryPtr geometry : *this) {
@@ -44,9 +44,9 @@ bool GeometrySet::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surface
   return gotHit;
 }
 
-bool GeometrySet::hitTest(const Ray* ray, float* hitTValue) const {
+bool GeometrySet::hitTest(const Ray* ray, double* hitTValue) const {
   bool gotHit = false;
-  float testTValue;
+  double testTValue;
   for (GeometryPtr geometry : *this) {
     if (geometry->hitTest(ray, &testTValue)) {
       if (!gotHit || testTValue < *hitTValue) {

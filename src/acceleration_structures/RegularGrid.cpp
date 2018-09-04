@@ -6,7 +6,7 @@
 #include <cfloat>
 #include "RegularGrid.h"
 
-RegularGrid::RegularGrid(float cellNumFactor /*= 2*/) : cellNumFactor(cellNumFactor) {
+RegularGrid::RegularGrid(double cellNumFactor /*= 2*/) : cellNumFactor(cellNumFactor) {
 
 }
 
@@ -14,24 +14,24 @@ RegularGrid::RegularGrid(float cellNumFactor /*= 2*/) : cellNumFactor(cellNumFac
 
 //  if outside of grid, this just clamps the cell numbers
 void RegularGrid::getCellContainingPoint(const Vector3D& point, int* cellX, int* cellY, int* cellZ) const {
-  float gridSizeX, gridSizeY, gridSizeZ;
+  double gridSizeX, gridSizeY, gridSizeZ;
   boundingBox->getSize(&gridSizeX, &gridSizeY, &gridSizeZ);
   Vector3D cell = point - boundingBox->getLowerBound();
-  cell.x *= (float) numCellsX / gridSizeX;
-  cell.y *= (float) numCellsY / gridSizeY;
-  cell.z *= (float) numCellsZ / gridSizeZ;
+  cell.x *= (double) numCellsX / gridSizeX;
+  cell.y *= (double) numCellsY / gridSizeY;
+  cell.z *= (double) numCellsZ / gridSizeZ;
   *cellX = CLAMP(cell.x, numCellsX-1);
   *cellY = CLAMP(cell.y, numCellsY-1);
   *cellZ = CLAMP(cell.z, numCellsZ-1);
 }
 
 void RegularGrid::initialiseStructure() {
-  float gridSizeX, gridSizeY, gridSizeZ;
+  double gridSizeX, gridSizeY, gridSizeZ;
   boundingBox->getSize(&gridSizeX, &gridSizeY, &gridSizeZ);
-  float s = (float)pow(gridSizeX*gridSizeY*gridSizeZ / size(), 0.3333);
-  numCellsX = (uint) std::max((cellNumFactor * gridSizeX / s) + 1, 1.0f);
-  numCellsY = (uint) std::max((cellNumFactor * gridSizeY / s) + 1, 1.0f);
-  numCellsZ = (uint) std::max((cellNumFactor * gridSizeZ / s) + 1, 1.0f);
+  double s = (double)pow(gridSizeX*gridSizeY*gridSizeZ / size(), 0.3333);
+  numCellsX = (uint) std::max((cellNumFactor * gridSizeX / s) + 1, 1.0);
+  numCellsY = (uint) std::max((cellNumFactor * gridSizeY / s) + 1, 1.0);
+  numCellsZ = (uint) std::max((cellNumFactor * gridSizeZ / s) + 1, 1.0);
   uint numCells = numCellsX * numCellsY * numCellsZ;
 
   cells.clear();
@@ -52,8 +52,8 @@ void RegularGrid::initialiseStructure() {
   }
 }
 
-bool RegularGrid::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
-  float gridHitTValue;
+bool RegularGrid::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
+  double gridHitTValue;
   if(boundingBox->hitTest(ray, &gridHitTValue)){
 
     //  find which cell to start in
@@ -66,35 +66,35 @@ bool RegularGrid::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surface
     }
 
     //  calculate the cell t offset and next values, and cell increments
-    float tXOffset = 0, tYOffset = 0, tZOffset = 0;
-    float tXNext = FLT_MAX, tYNext = FLT_MAX, tZNext = FLT_MAX;
+    double tXOffset = 0, tYOffset = 0, tZOffset = 0;
+    double tXNext = FLT_MAX, tYNext = FLT_MAX, tZNext = FLT_MAX;
     int cellXInc = 0, cellYInc = 0, cellZInc = 0;
 
     if (ray->direction.x != 0){
-      float tXLB = (boundingBox->getLowerBound().x - ray->origin.x) / ray->direction.x;
-      float tXUB = (boundingBox->getUpperBound().x - ray->origin.x) / ray->direction.x;
+      double tXLB = (boundingBox->getLowerBound().x - ray->origin.x) / ray->direction.x;
+      double tXUB = (boundingBox->getUpperBound().x - ray->origin.x) / ray->direction.x;
       cellXInc = ray->direction.x >= 0 ? 1 : -1;
-      tXOffset = (float)fabs(tXLB - tXUB) / numCellsX;
+      tXOffset = fabs(tXLB - tXUB) / numCellsX;
       if (tXLB < tXUB)
         tXNext = tXLB + tXOffset * (cellX + 1);
       else
         tXNext = tXUB + tXOffset * (numCellsX - cellX);
     }
     if (ray->direction.y != 0) {
-      float tYLB = (boundingBox->getLowerBound().y - ray->origin.y) / ray->direction.y;
-      float tYUB = (boundingBox->getUpperBound().y - ray->origin.y) / ray->direction.y;
+      double tYLB = (boundingBox->getLowerBound().y - ray->origin.y) / ray->direction.y;
+      double tYUB = (boundingBox->getUpperBound().y - ray->origin.y) / ray->direction.y;
       cellYInc = ray->direction.y >= 0 ? 1 : -1;
-      tYOffset = (float) fabs(tYLB - tYUB) / numCellsY;
+      tYOffset =  fabs(tYLB - tYUB) / numCellsY;
       if (tYLB < tYUB)
         tYNext = tYLB + tYOffset * (cellY + 1);
       else
         tYNext = tYUB + tYOffset * (numCellsY - cellY);
     }
     if (ray->direction.z != 0){
-      float tZLB = (boundingBox->getLowerBound().z - ray->origin.z) / ray->direction.z;
-      float tZUB = (boundingBox->getUpperBound().z - ray->origin.z) / ray->direction.z;
+      double tZLB = (boundingBox->getLowerBound().z - ray->origin.z) / ray->direction.z;
+      double tZUB = (boundingBox->getUpperBound().z - ray->origin.z) / ray->direction.z;
       cellZInc = ray->direction.z >= 0 ? 1 : -1;
-      tZOffset = (float)fabs(tZLB - tZUB) / numCellsZ;
+      tZOffset = fabs(tZLB - tZUB) / numCellsZ;
       if (tZLB < tZUB)
         tZNext = tZLB + tZOffset * (cellZ + 1);
       else
@@ -104,13 +104,13 @@ bool RegularGrid::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surface
     //  traverse through the cells that the ray goes through, and hit test the objects in them
     GeometryPtr cell;
     SurfaceInfo testSurfaceInfo;
-    float nextTValue;   // the t value of the ray, when it's exiting the current cell
+    double nextTValue;   // the t value of the ray, when it's exiting the current cell
     while (true) {
       nextTValue = std::min(tXNext, std::min(tYNext, tZNext));
       cell = cells[getCellIndex(cellX, cellY, cellZ)];
 
       //  hit test the objects in the cell
-      float testTValue;
+      double testTValue;
       bool gotHit;
       if(surfaceInfo)
         gotHit = cell && cell->hitTest(ray, &testTValue, &testSurfaceInfo);
@@ -153,7 +153,7 @@ bool RegularGrid::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surface
   return false;
 }
 
-bool RegularGrid::hitTest(const Ray* ray, float* hitTValue) const {
+bool RegularGrid::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

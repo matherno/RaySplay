@@ -13,7 +13,7 @@ PrimitivePlane::PrimitivePlane(const mathernogl::Vector3D& point, const matherno
 
 }
 
-bool PrimitivePlane::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool PrimitivePlane::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   using namespace mathernogl;
   float tValue = dotProduct((point - ray->origin), normal) / dotProduct(ray->direction, normal);
   if(tValue > EPSILON){
@@ -28,7 +28,7 @@ bool PrimitivePlane::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surf
   return false;
 }
 
-bool PrimitivePlane::hitTest(const Ray* ray, float* hitTValue) const {
+bool PrimitivePlane::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

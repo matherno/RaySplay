@@ -10,30 +10,16 @@ AreaLight::AreaLight(GeometryPtr lightGeometry) : geometry(lightGeometry)
   {
   }
 
-bool AreaLight::startShadingAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef)
+bool AreaLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection)
   {
-  Vector3D currentSamplePos;
+  Vector3D currentSamplePos, currentSampleNorm;
   if(geometry->getSurfaceSample(&currentSamplePos, &currentSampleNorm))
     {
-    setPosition(currentSamplePos);
-    return true;
+    const bool canCastShadows = geometry->canCastShadows();
+    geometry->setCastShadows(false);
+    bool res = PointLight::lightAtSurface(surfaceInfo, sceneDef, currentSamplePos, lightIntensity, lightDirection);
+    geometry->setCastShadows(canCastShadows);
+    return res;
     }
   return false;
   }
-
-bool AreaLight::isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef)
-  {
-  const bool canCastShadows = geometry->canCastShadows();
-  geometry->setCastShadows(false);
-  const bool result = PointLight::isPointInShadow(surfaceInfo, sceneDef);
-  geometry->setCastShadows(canCastShadows);
-  return result;
-  }
-
-Vector3D AreaLight::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef)
-  {
-  Vector3D intensity = PointLight::lightIntensityAtPoint(surfaceInfo, sceneDef);
-//  intensity *= std::max(mathernogl::dotProduct(surfaceInfo->normal, currentSampleNorm), 0.0);
-  return intensity;
-  }
-

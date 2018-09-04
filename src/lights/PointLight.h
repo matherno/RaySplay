@@ -26,7 +26,8 @@ public:
   void setRadius(float radius) { this->radius = radius; }
   void setFallOffExp(float exp) { this->falloffExp = exp; }
 
-  virtual bool isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-  virtual Vector3D lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-  virtual Vector3D lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
+  virtual bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection) override;
+
+protected:
+  bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, const Vector3D& lightPos, Vector3D* lightIntensity, Vector3D* lightDirection);
 };

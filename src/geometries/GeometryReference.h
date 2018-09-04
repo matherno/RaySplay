@@ -23,8 +23,8 @@ public:
   void setTransform(const mathernogl::Transform& transform);
 
   virtual bool init() override;
-  virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
-  virtual bool hitTest(const Ray* ray, float* hitTValue) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue) const override;
   virtual void constructBoundingBox() override;
 
 };

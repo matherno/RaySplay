@@ -28,8 +28,8 @@ public:
   float getRadiusSquared() const;
   Vector2D getTextureCoord(const Vector3D& position) const;
 
-  virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
-  virtual bool hitTest(const Ray* ray, float* hitTValue) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue) const override;
   virtual void constructBoundingBox() override;
 
   virtual bool getSurfaceSample(Vector3D* position, Vector3D* normal) override;

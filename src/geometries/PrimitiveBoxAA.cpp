@@ -21,7 +21,7 @@ void PrimitiveBoxAA::setBounds(const BoundingBoxPtr boundingBox) {
   boundingBox->setBounds(boundingBox->getLowerBound(), boundingBox->getUpperBound());
 }
 
-bool PrimitiveBoxAA::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool PrimitiveBoxAA::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   FaceID hitFaceID;
   if(boundingBox->hitTest(ray, hitTValue, &hitFaceID)){
     if (*hitTValue > EPSILON) {
@@ -36,7 +36,7 @@ bool PrimitiveBoxAA::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surf
   return false;
 }
 
-bool PrimitiveBoxAA::hitTest(const Ray* ray, float* hitTValue) const {
+bool PrimitiveBoxAA::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

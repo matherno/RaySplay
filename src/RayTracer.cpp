@@ -8,7 +8,7 @@
 bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::Vector3D* resultColour) {
   bool gotHit = false;
   if(ray->depth < sceneDef->maxRayDepth) {
-    float minTValue, testTValue;
+    double minTValue, testTValue;
     SurfaceInfo finalSurfaceInfo, testSurfaceInfo;
 
     for (GeometryPtr geometry : sceneDef->geometries) {
@@ -33,8 +33,8 @@ bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::V
   return gotHit;
 }
 
-bool RayTracer::traceShadowRay(const Ray* ray, const SceneDef* sceneDef, float* tHitValue) {
-  float testTValue;
+bool RayTracer::traceShadowRay(const Ray* ray, const SceneDef* sceneDef, double* tHitValue) {
+  double testTValue;
   bool gotHit = false;
   for(GeometryPtr geometry : sceneDef->geometries){
     if(geometry->canCastShadows() && geometry->hitTest(ray, &testTValue)){

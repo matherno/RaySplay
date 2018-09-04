@@ -27,16 +27,14 @@ Vector3D LambertianShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* su
   Vector3D diffuse = getDiffuseColour(surfaceInfo);
   for(LightSourcePtr light : sceneDef->lights)
     {
-    if(light->startShadingAtPoint(surfaceInfo, sceneDef) && !light->isPointInShadow(surfaceInfo, sceneDef))
+    Vector3D lightDir, lightCol;
+    if(light->lightAtSurface(surfaceInfo, sceneDef, &lightCol, &lightDir))
       {
       double lightFactor = 1;
       if(!light->isAmbient())
-        {
-        const Vector3D lightDir = light->lightDirectionAtPoint(surfaceInfo, sceneDef);
         lightFactor = diffuseScatterer.getSurfaceRadianceFactor(surfaceInfo->normal, lightDir);
-        }
       if(lightFactor > 0)
-        finalColour += diffuse * (light->lightIntensityAtPoint(surfaceInfo, sceneDef) * lightFactor);
+        finalColour += diffuse * (lightCol * lightFactor);
       }
     }
   return finalColour;

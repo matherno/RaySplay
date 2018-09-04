@@ -14,5 +14,5 @@ public:
   //  traces along the given ray and returns true if it hits an object in the given scene definition, giving that hits 't' value
   //  ignores the rays depth
   //  more efficient than traceRay() as it doesn't need to do any shading
-  static bool traceShadowRay(const Ray* ray, const SceneDef* sceneDef, float* tHitValue);
+  static bool traceShadowRay(const Ray* ray, const SceneDef* sceneDef, double* tHitValue);
 };

@@ -59,7 +59,7 @@ Vector2D PrimitiveSphere::getTextureCoord(const Vector3D& position) const {
 }
 
 
-bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool PrimitiveSphere::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   using namespace mathernogl;
   Vector3D originToCentre = ray->origin - centre;
   float a = dotProduct(ray->direction, ray->direction);
@@ -98,7 +98,7 @@ bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* sur
   return false;
 }
 
-bool PrimitiveSphere::hitTest(const Ray* ray, float* hitTValue) const {
+bool PrimitiveSphere::hitTest(const Ray* ray, double* hitTValue) const {
   return hitTest(ray, hitTValue, nullptr);
 }
 

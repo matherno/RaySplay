@@ -8,7 +8,7 @@
 
 class RegularGrid : public AccelerationStructure {
 private:
-  float cellNumFactor = 2;
+  double cellNumFactor = 2;
 
   std::vector<GeometryPtr> cells;
   std::vector<uint> cellCounts;
@@ -17,11 +17,11 @@ private:
   uint numCellsZ = 0;
 
 public:
-  RegularGrid(float cellNumFactor = 2);
+  RegularGrid(double cellNumFactor = 2);
   virtual ~RegularGrid(){}
 
-  virtual bool hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const override;
-  virtual bool hitTest(const Ray* ray, float* hitTValue) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const override;
+  virtual bool hitTest(const Ray* ray, double* hitTValue) const override;
 
 protected:
   virtual void initialiseStructure() override;

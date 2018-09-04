@@ -54,7 +54,7 @@ void BoundingBox::addPoint(const Vector3D& point) {
   setBounds(lb, ub);
 }
 
-void BoundingBox::addPoint(float x, float y, float z) {
+void BoundingBox::addPoint(double x, double y, double z) {
   addPoint(Vector3D(x, y, z));
 }
 
@@ -82,11 +82,11 @@ Vector3D BoundingBox::getFaceNormal(FaceID faceID) const{
 /*
  *  Based on the algorithm presented by Kevin Suffern, in "Ray Tracing from the Ground Up", p354-361,
  */
-bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*= nullptr */) const {
-  float xTValueMin, yTValueMin, zTValueMin;
-  float xTValueMax, yTValueMax, zTValueMax;
+bool BoundingBox::hitTest(const Ray* ray, double* hitTValue, FaceID* hitFaceID /*= nullptr */) const {
+  double xTValueMin, yTValueMin, zTValueMin;
+  double xTValueMax, yTValueMax, zTValueMax;
 
-  float invRayDirX = 1.0f / ray->direction.x;
+  double invRayDirX = 1.0f / ray->direction.x;
   if(invRayDirX >= 0){
     xTValueMin = (lowerBound.x - ray->origin.x) * invRayDirX;
     xTValueMax = (upperBound.x - ray->origin.x) * invRayDirX;
@@ -96,7 +96,7 @@ bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*
     xTValueMax = (lowerBound.x - ray->origin.x) * invRayDirX;
   }
 
-  float invRayDirY = 1.0f / ray->direction.y;
+  double invRayDirY = 1.0f / ray->direction.y;
   if(invRayDirY >= 0){
     yTValueMin = (lowerBound.y - ray->origin.y) * invRayDirY;
     yTValueMax = (upperBound.y - ray->origin.y) * invRayDirY;
@@ -106,7 +106,7 @@ bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*
     yTValueMax = (lowerBound.y - ray->origin.y) * invRayDirY;
   }
 
-  float invRayDirZ = 1.0f / ray->direction.z;
+  double invRayDirZ = 1.0f / ray->direction.z;
   if(invRayDirZ >= 0){
     zTValueMin = (lowerBound.z - ray->origin.z) * invRayDirZ;
     zTValueMax = (upperBound.z - ray->origin.z) * invRayDirZ;
@@ -117,7 +117,7 @@ bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*
   }
 
 
-  float tValueIn;
+  double tValueIn;
   FaceID hitFaceIn;
   if(xTValueMin > yTValueMin){
     tValueIn = xTValueMin;
@@ -132,7 +132,7 @@ bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*
     hitFaceIn = invRayDirZ >= 0.0 ? faceNegZ : facePosZ;
   }
 
-  float tValueOut;
+  double tValueOut;
   FaceID hitFaceOut;
   if(xTValueMax < yTValueMax){
     tValueOut = xTValueMax;
@@ -167,7 +167,7 @@ bool BoundingBox::hitTest(const Ray* ray, float* hitTValue, FaceID* hitFaceID /*
 }
 
 bool BoundingBox::hitTest(const Ray* ray) const {
-  float tValue;
+  double tValue;
   return hitTest(ray, &tValue);
 }
 
@@ -178,7 +178,7 @@ void BoundingBox::expandBounds(float expansion /*= EPSILON*/) {
   }
 }
 
-void BoundingBox::getSize(float* x, float* y, float* z) const {
+void BoundingBox::getSize(double* x, double* y, double* z) const {
   Vector3D size;
   size = getSize();
   *x = size.x;

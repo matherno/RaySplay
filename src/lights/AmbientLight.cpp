@@ -12,19 +12,6 @@ AmbientLight::AmbientLight(const Vector3D& colour) : colour(colour) {
 
 }
 
-bool AmbientLight::isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  return false;
-}
-
-Vector3D AmbientLight::lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  ASSERT(false, "Requesting the direction of ambient light. Need to check isAmbient().");
-  return Vector3D();
-}
-
-Vector3D AmbientLight::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  return colour;
-}
-
 const Vector3D AmbientLight::getColour() const {
   return colour;
 }
@@ -32,4 +19,11 @@ const Vector3D AmbientLight::getColour() const {
 void AmbientLight::setColour(const Vector3D& colour) {
   this->colour = colour;
 }
+
+bool AmbientLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection)
+  {
+  if (lightIntensity)
+    *lightIntensity = colour;
+  return true;
+  }
 

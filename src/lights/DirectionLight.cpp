@@ -32,18 +32,16 @@ void DirectionLight::setDirection(const Vector3D& direction) {
   directionFlipped = this->direction * -1;
 }
 
-bool DirectionLight::isPointInShadow(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  if(!castShadows)
-    return false;
+bool DirectionLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection)
+  {
   Ray shadowRay = Ray::create(surfaceInfo->position, directionFlipped);
-  float tValue;
-  return RayTracer::traceShadowRay(&shadowRay, sceneDef, &tValue);
-}
+  double tValue;
+  if(castShadows && RayTracer::traceShadowRay(&shadowRay, sceneDef, &tValue))
+    return false;
 
-Vector3D DirectionLight::lightDirectionAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  return directionFlipped;
-}
-
-Vector3D DirectionLight::lightIntensityAtPoint(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
-  return colour;
-}
+  if (lightIntensity)
+    *lightIntensity = colour;
+  if (lightDirection)
+    *lightDirection = directionFlipped;
+  return true;
+  }

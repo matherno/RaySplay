@@ -20,14 +20,14 @@ bool GeometryReference::init() {
   return Geometry::init();
 }
 
-bool GeometryReference::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* surfaceInfo) const {
+bool GeometryReference::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   Vector3D invTransformedOrigin;
   Vector3D invTransformedRayPoint;
   invTransform.transform(ray->origin,                  &invTransformedOrigin);
   invTransform.transform(ray->origin + ray->direction, &invTransformedRayPoint);
 
   Ray invTransformedRay = Ray::createFromPoints(invTransformedOrigin, invTransformedRayPoint);
-  float invTransformedTValue;
+  double invTransformedTValue;
   SurfaceInfo testSurfaceInfo;
   if (geometry->hitTest(&invTransformedRay, &invTransformedTValue, &testSurfaceInfo)){
     *hitTValue = invTransformedTValue / invTransformedOrigin.distanceToPoint(invTransformedRayPoint);
@@ -42,14 +42,14 @@ bool GeometryReference::hitTest(const Ray* ray, float* hitTValue, SurfaceInfo* s
     return false;
 }
 
-bool GeometryReference::hitTest(const Ray* ray, float* hitTValue) const {
+bool GeometryReference::hitTest(const Ray* ray, double* hitTValue) const {
   Vector3D invTransformedOrigin;
   Vector3D invTransformedRayPoint;
   invTransform.transform(ray->origin,                  &invTransformedOrigin);
   invTransform.transform(ray->origin + ray->direction, &invTransformedRayPoint);
 
   Ray invTransformedRay = Ray::createFromPoints(invTransformedOrigin, invTransformedRayPoint);
-  float invTransformedTValue;
+  double invTransformedTValue;
   if (geometry->hitTest(&invTransformedRay, &invTransformedTValue)){
     *hitTValue = invTransformedTValue / invTransformedOrigin.distanceToPoint(invTransformedRayPoint);
     return true;
