@@ -3,7 +3,6 @@
 //
 
 #include "SampleGenerator.h"
-#include "RaySplayConst.h"
 
 SampleGenerator::SampleGenerator(int sqrtNumSamples, int numSampleSets)
     : sqrtNumSamples(sqrtNumSamples), numSampleSets(numSampleSets), numSamples(sqrtNumSamples*sqrtNumSamples)  {

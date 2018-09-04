@@ -3,25 +3,11 @@
 //
 
 #include <shaders/PhongShader.h>
-#include <lights/PointLight.h>
 #include <lights/AmbientOcclusion.h>
-#include <lights/AmbientLight.h>
-#include <shaders/ReflectionShader.h>
 #include <cameras/CameraOrthographic.h>
-#include <geometries/Mesh.h>
-#include <lights/DirectionLight.h>
-#include <geometries/PrimitiveBoxAA.h>
-#include <geometries/PrimitiveSphere.h>
-#include <geometries/GeometrySet.h>
-#include <acceleration_structures/RegularGrid.h>
 #include "Scene.h"
 #include "RayTracer.h"
-#include "AccelerationStructure.h"
 #include "SceneLoader.h"
-#include <ctime>
-#include <chrono>
-#include <geometries/GeometryReference.h>
-#include <shaders/NormalsTestShader.h>
 #include <thread>
 
 #define NUM_UPDATES 32

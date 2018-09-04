@@ -3,7 +3,6 @@
 //
 
 #include "PrimitivePlane.h"
-#include "RaySplayConst.h"
 
 PrimitivePlane::PrimitivePlane() : point(0,0,0), normal(0,1,0){
 

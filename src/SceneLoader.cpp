@@ -12,12 +12,10 @@
 #include <lights/AreaLight.h>
 #include <shaders/EmissionShader.h>
 #include "SceneLoader.h"
-#include "RaySplayConst.h"
 #include "tinyxml2/tinyxml2.h"
 #include "lights/AmbientLight.h"
 #include "lights/AmbientOcclusion.h"
 #include "lights/DirectionLight.h"
-#include "lights/PointLight.h"
 
 #define CURRENT_XML_VERSION 1
 

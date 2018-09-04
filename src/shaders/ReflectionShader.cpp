@@ -3,7 +3,6 @@
 //
 
 #include <RayTracer.h>
-#include <Samplers.h>
 #include "ReflectionShader.h"
 
 ReflectionShader::ReflectionShader()

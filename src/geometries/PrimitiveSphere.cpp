@@ -4,7 +4,6 @@
 
 #include <Samplers.h>
 #include "PrimitiveSphere.h"
-#include "RaySplayConst.h"
 
 PrimitiveSphere::PrimitiveSphere() : centre(0), radius(1) {
   radiusSquared = radius * radius;
