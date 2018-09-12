@@ -12,6 +12,7 @@
 #include <lights/AreaLight.h>
 #include <shaders/EmissionShader.h>
 #include <shaders/TransparencyShader.h>
+#include <lights/EnvironmentLight.h>
 #include "SceneLoader.h"
 #include "tinyxml2/tinyxml2.h"
 #include "lights/AmbientLight.h"
@@ -48,6 +49,7 @@
 #define DIRECTION_LIGHT "DirectionLight"
 #define POINT_LIGHT "PointLight"
 #define AREA_LIGHT "AreaLight"
+#define ENV_LIGHT "EnvironmentLight"
 #define LAMBERTIAN "Lambertian"
 #define PHONG "Phong"
 #define REFLECTION "Reflection"
@@ -385,6 +387,14 @@ static void loadLightSources(XMLDocument& doc, XMLElement* lightSourcesElement, 
       Vector3D colour = getVector3DValue(doc, lightElement->FirstChildElement(COLOUR));
       float radius = lightElement->FloatAttribute(RADIUS, 4);
       lightSource.reset(new AmbientOcclusion(colour, radius));
+      }
+    else if (lightSourceType == ENV_LIGHT)
+      {
+      XMLElement* colourElement = lightElement->FirstChildElement(COLOUR);
+      Vector3D colour = scene->getSceneDef()->bgColour;
+      if (colourElement)
+        colour = getVector3DValue(doc, colourElement);
+      lightSource.reset(new EnvironmentLight(colour));
       }
     else if (lightSourceType == DIRECTION_LIGHT)
       {
