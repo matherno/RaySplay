@@ -11,6 +11,7 @@
 #include <shaders/ReflectionShader.h>
 #include <lights/AreaLight.h>
 #include <shaders/EmissionShader.h>
+#include <shaders/TransparencyShader.h>
 #include "SceneLoader.h"
 #include "tinyxml2/tinyxml2.h"
 #include "lights/AmbientLight.h"
@@ -50,6 +51,7 @@
 #define LAMBERTIAN "Lambertian"
 #define PHONG "Phong"
 #define REFLECTION "Reflection"
+#define TRANSPARENCY "Transparency"
 
 #define MATERIAL "Material"
 #define PREFABREF "PrefabReference"
@@ -57,9 +59,11 @@
 #define FILE_PATH "FilePath"
 #define COLOUR "Colour"
 #define MIRRORCOLOUR "MirrorColour"
+#define INTERNALCOLOUR "InternalColour"
 #define SPECULAR "Specular"
 #define EXP "Exp"
 #define FUZZINESS "Fuzziness"
+#define REFRACTIDX "RefractionIdx"
 #define VEC3D_X "X"
 #define VEC3D_Y "Y"
 #define VEC3D_Z "Z"
@@ -231,6 +235,22 @@ static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::m
       auto reflectionShader = new ReflectionShader(colour, specular, exp, mirror);
       reflectionShader->setFuzziness(fuzziness);
       shader.reset(reflectionShader);
+      }
+    else if (geometryType == TRANSPARENCY)
+      {
+      const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
+      const Vector3D specular = getVector3DValue(doc, materialElement->FirstChildElement(SPECULAR));
+      const Vector3D mirror = getVector3DValue(doc, materialElement->FirstChildElement(MIRRORCOLOUR));
+      const Vector3D internal = getVector3DValue(doc, materialElement->FirstChildElement(INTERNALCOLOUR));
+      const float exp = materialElement->FloatAttribute(EXP, 1);
+      const float fuzziness = materialElement->FloatAttribute(FUZZINESS, 0);
+      const float index = materialElement->FloatAttribute(REFRACTIDX, 1);
+      auto transparencyShader = new TransparencyShader(colour, specular, exp);
+      transparencyShader->setMirrorCol(mirror);
+      transparencyShader->setFuzziness(fuzziness);
+      transparencyShader->setInternalCol(internal);
+      transparencyShader->setRefractionIndex(index);
+      shader.reset(transparencyShader);
       }
 
     if (shader && id > 0)
@@ -488,7 +508,7 @@ bool SceneLoader::loadSceneFromXML(const std::string& filePath, Scene* scene)
   std::map<uint, GeometryPtr> prefabedGeometries;
 
   loadView(doc, viewDef, scene);
-  loadCamera(doc, rootScene, scene);
+  loadCamera(doc, rootScene, scene);\
   if (config)
     loadExtraConfig(doc, config, scene);
 

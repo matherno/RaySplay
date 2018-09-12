@@ -5,8 +5,10 @@
 #include "RayTracer.h"
 
 
-bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::Vector3D* resultColour) {
+bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::Vector3D* resultColour, bool* hitBackground) {
   bool gotHit = false;
+  if (hitBackground)
+    *hitBackground = false;
   if(ray->depth < sceneDef->maxRayDepth) {
     double minTValue, testTValue;
     SurfaceInfo finalSurfaceInfo, testSurfaceInfo;
@@ -29,6 +31,9 @@ bool RayTracer::traceRay(const Ray* ray, const SceneDef* sceneDef, mathernogl::V
         *resultColour = ERROR_COLOUR;
       }
     }
+
+    if (hitBackground)
+      *hitBackground = !gotHit;
   }
   return gotHit;
 }

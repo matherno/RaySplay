@@ -124,7 +124,6 @@ void RSMainFrame::onRender(wxCommandEvent& event)
        scene.getViewDef()->height = (uint) (scene.getViewDef()->width / aspectRatio);
        scene.getViewDef()->draftMode = true;
        scene.getViewDef()->antiAliasingDegree = 1;
-       scene.getSceneDef()->maxRayDepth = 2;
        }
 
       scene.render(this);

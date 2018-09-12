@@ -39,7 +39,7 @@ public:
 
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
 
-protected:
+private:
   Vector3D getDiffuseColour(const SurfaceInfo* surfaceInfo) const;
   void setupScatterers();
 };

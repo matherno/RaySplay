@@ -51,9 +51,14 @@ Vector3D ReflectionShader::calcReflectedLight(const Ray* hitRay, const SurfaceIn
   Ray reflectedRay = Ray::create(surfaceInfo->position, sampleReflection);
   reflectedRay.depth = hitRay->depth + 1;
   Vector3D reflectedCol(0);
-  if(RayTracer::traceRay(&reflectedRay, sceneDef, &reflectedCol))
-    return reflectedCol;
-  return sceneDef->bgColour;
+  bool hitBackground = false;
+  const double radianceFactor = reflectiveScatterer->getSurfaceRadianceFactor(surfaceInfo->normal, hitRay->direction*-1, sampleReflection);
+  if(RayTracer::traceRay(&reflectedRay, sceneDef, &reflectedCol, &hitBackground))
+    return reflectedCol * radianceFactor;
+  if (hitBackground)
+    return sceneDef->bgColour * radianceFactor;
+  else
+    return Vector3D(0);
   }
 
 void ReflectionShader::setupScatterer()

@@ -10,7 +10,7 @@ PrimitiveSphere::PrimitiveSphere() : centre(0), radius(1) {
   setupSurfaceSampler();
 }
 
-PrimitiveSphere::PrimitiveSphere(const mathernogl::Vector3D& centre, float radius) : centre(centre), radius(radius) {
+PrimitiveSphere::PrimitiveSphere(const mathernogl::Vector3D& centre, double radius) : centre(centre), radius(radius) {
   radiusSquared = radius * radius;
   setupSurfaceSampler();
 }
@@ -23,23 +23,23 @@ void PrimitiveSphere::setCentre(const mathernogl::Vector3D& centre) {
   this->centre = centre;
 }
 
-void PrimitiveSphere::setCentre(float x, float y, float z) {
+void PrimitiveSphere::setCentre(double x, double y, double z) {
   this->centre.x = x;
   this->centre.y = y;
   this->centre.z = z;
 }
 
-float PrimitiveSphere::getRadius() const {
+double PrimitiveSphere::getRadius() const {
   return radius;
 }
 
-void PrimitiveSphere::setRadius(float radius) {
+void PrimitiveSphere::setRadius(double radius) {
   this->radius = radius;
 
   radiusSquared = radius * radius;
 }
 
-float PrimitiveSphere::getRadiusSquared() const {
+double PrimitiveSphere::getRadiusSquared() const {
   return radiusSquared;
 }
 
@@ -61,16 +61,16 @@ Vector2D PrimitiveSphere::getTextureCoord(const Vector3D& position) const {
 bool PrimitiveSphere::hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const {
   using namespace mathernogl;
   Vector3D originToCentre = ray->origin - centre;
-  float a = dotProduct(ray->direction, ray->direction);
-  float b = 2.0f * dotProduct(originToCentre, ray->direction);
-  float c = dotProduct(originToCentre, originToCentre) - radiusSquared;
-  float discriminant = b*b - (4.0f*a*c);
+  double a = dotProduct(ray->direction, ray->direction);
+  double b = 2.0f * dotProduct(originToCentre, ray->direction);
+  double c = dotProduct(originToCentre, originToCentre) - radiusSquared;
+  double discriminant = b*b - (4.0f*a*c);
 
   if(discriminant > 0){
-    float sqrtPart = (float)sqrt(discriminant);
-    float denominator = 2*a;
+    double sqrtPart = sqrt(discriminant);
+    double denominator = 2*a;
 
-    float tValueResult = (-b - sqrtPart)/denominator;
+    double tValueResult = (-b - sqrtPart)/denominator;
     if(tValueResult > EPSILON){
       *hitTValue = tValueResult;
       if(surfaceInfo){

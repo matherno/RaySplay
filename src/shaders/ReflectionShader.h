@@ -29,7 +29,7 @@ public:
 
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
 
-protected:
+private:
 
   /*
    *  Reflects the given uniform vector around the given normal

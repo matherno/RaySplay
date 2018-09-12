@@ -53,3 +53,14 @@ public:
   virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) override;
   virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) override;
   };
+
+class LightScatterRefraction : public LightScatterBase
+  {
+private:
+  double refractionIdx = 1;
+
+public:
+  LightScatterRefraction(double refractionIndex) : refractionIdx(std::max(refractionIndex, 0.001)) {}
+  virtual double getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight) override;
+  virtual Vector3D sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView) override;
+  };

@@ -54,7 +54,10 @@ double LightScatterSpecular::getSurfaceRadianceFactor(const Vector3D& surfaceNor
 
   Vector3D halfVector = surfaceToLight + surfaceToView;
   halfVector.makeUniform();
-  return pow(mathernogl::dotProduct(halfVector, surfaceNormal), cosineExp);
+  double radiance = pow(mathernogl::dotProduct(halfVector, surfaceNormal), cosineExp);
+  if (std::isnan(radiance))
+    return 0;
+  return radiance;
   }
 
 Vector3D LightScatterSpecular::sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView)
@@ -83,10 +86,39 @@ Vector3D LightScatterSpecular::sampleIncomingLightDir(const Vector3D& surfaceNor
 
 double LightScatterPerfectSpecular::getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight)
   {
-  return 1;
+  return std::max(0.0, mathernogl::dotProduct(surfaceNormal, surfaceToLight));
   }
 
 Vector3D LightScatterPerfectSpecular::sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView)
   {
   return mathernogl::reflect(surfaceToView * -1, surfaceNormal);
+  }
+
+
+/*
+ *  LightScatterRefraction
+ */
+
+double LightScatterRefraction::getSurfaceRadianceFactor(const Vector3D& surfaceNormal, const Vector3D& surfaceToView, const Vector3D& surfaceToLight)
+  {
+  return fabs(mathernogl::dotProduct(surfaceNormal, surfaceToLight));
+  }
+
+Vector3D LightScatterRefraction::sampleIncomingLightDir(const Vector3D& surfaceNormal, const Vector3D& surfaceToView)
+  {
+  Vector3D normal = surfaceNormal;
+  double viewDotNormal = mathernogl::dotProduct(normal, surfaceToView);
+  double index = refractionIdx;
+  if (viewDotNormal < 0.0)
+    {
+    // ray has hit the underside of the surface
+    viewDotNormal *= -1;
+    normal *= -1;
+    index = 1.0 / index;
+    }
+
+  const double cosRefAngleSquared = 1.0 - (1.0 - viewDotNormal * viewDotNormal) / (index * index);
+  if (cosRefAngleSquared < 0.0)
+    return Vector3D(0);
+  return (surfaceToView / -index) - (normal * (sqrt(cosRefAngleSquared) - viewDotNormal / index));
   }
