@@ -19,4 +19,6 @@ public:
 
   inline Vector3D getTexelColour(uint col, uint row) const;
   virtual Vector3D getColour(const Vector2D& texCoord) const override;
+
+  static TexturePtr create(string filePath);
 };

@@ -13,6 +13,7 @@
 #include <shaders/EmissionShader.h>
 #include <shaders/TransparencyShader.h>
 #include <lights/EnvironmentLight.h>
+#include <textures/ImageTexture.h>
 #include "SceneLoader.h"
 #include "tinyxml2/tinyxml2.h"
 #include "lights/AmbientLight.h"
@@ -66,6 +67,7 @@
 #define EXP "Exp"
 #define FUZZINESS "Fuzziness"
 #define REFRACTIDX "RefractionIdx"
+#define TEXTURE "Texture"
 #define VEC3D_X "X"
 #define VEC3D_Y "Y"
 #define VEC3D_Z "Z"
@@ -206,6 +208,16 @@ static string getStringAttribute(XMLElement* element, const string& name)
   return string(attribute);
   }
 
+static TexturePtr getTextureFromElement(XMLElement* element)
+  {
+  if (element)
+    {
+    const string filePath = getStringAttribute(element, FILE_PATH);
+    return ImageTexture::create(filePath);
+    }
+  return nullptr;
+  }
+
 static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::map<uint, ShaderPtr>* shaders)
   {
   XMLElement* materialElement = materialsElement->FirstChildElement();
@@ -214,31 +226,44 @@ static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::m
     ShaderPtr shader;
     const uint id = materialElement->UnsignedAttribute(ID, 0);
 
-    const string geometryType = materialElement->Value();
-    if (geometryType == LAMBERTIAN)
+    const string materialType = materialElement->Value();
+    if (materialType == LAMBERTIAN)
       {
       const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
-      shader.reset(new PhongShader(colour));
+      TexturePtr texture = getTextureFromElement(materialElement->FirstChildElement(TEXTURE));
+      if (texture)
+        shader.reset(new PhongShader(texture, Vector3D(), 0));
+      else
+        shader.reset(new PhongShader(colour, Vector3D(), 0));
       }
-    else if (geometryType == PHONG)
+    else if (materialType == PHONG)
       {
       const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
       const Vector3D specular = getVector3DValue(doc, materialElement->FirstChildElement(SPECULAR));
       const float exp = materialElement->FloatAttribute(EXP, 1);
-      shader.reset(new PhongShader(colour, specular, exp));
+      TexturePtr texture = getTextureFromElement(materialElement->FirstChildElement(TEXTURE));
+      if (texture)
+        shader.reset(new PhongShader(texture, specular, exp));
+      else
+        shader.reset(new PhongShader(colour, specular, exp));
       }
-    else if (geometryType == REFLECTION)
+    else if (materialType == REFLECTION)
       {
       const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
       const Vector3D specular = getVector3DValue(doc, materialElement->FirstChildElement(SPECULAR));
       const Vector3D mirror = getVector3DValue(doc, materialElement->FirstChildElement(MIRRORCOLOUR));
       const float exp = materialElement->FloatAttribute(EXP, 1);
       const float fuzziness = materialElement->FloatAttribute(FUZZINESS, 0);
-      auto reflectionShader = new ReflectionShader(colour, specular, exp, mirror);
+      TexturePtr texture = getTextureFromElement(materialElement->FirstChildElement(TEXTURE));
+      ReflectionShader* reflectionShader;
+      if (texture)
+        reflectionShader = new ReflectionShader(texture, specular, exp, mirror);
+      else
+        reflectionShader = new ReflectionShader(colour, specular, exp, mirror);
       reflectionShader->setFuzziness(fuzziness);
       shader.reset(reflectionShader);
       }
-    else if (geometryType == TRANSPARENCY)
+    else if (materialType == TRANSPARENCY)
       {
       const Vector3D colour = getVector3DValue(doc, materialElement->FirstChildElement(COLOUR));
       const Vector3D specular = getVector3DValue(doc, materialElement->FirstChildElement(SPECULAR));
@@ -247,7 +272,12 @@ static void loadMaterials(XMLDocument& doc, XMLElement* materialsElement, std::m
       const float exp = materialElement->FloatAttribute(EXP, 1);
       const float fuzziness = materialElement->FloatAttribute(FUZZINESS, 0);
       const float index = materialElement->FloatAttribute(REFRACTIDX, 1);
-      auto transparencyShader = new TransparencyShader(colour, specular, exp);
+      TransparencyShader* transparencyShader;
+      TexturePtr texture = getTextureFromElement(materialElement->FirstChildElement(TEXTURE));
+      if (texture)
+        transparencyShader = new TransparencyShader(texture, specular, exp);
+      else
+        transparencyShader = new TransparencyShader(colour, specular, exp);
       transparencyShader->setMirrorCol(mirror);
       transparencyShader->setFuzziness(fuzziness);
       transparencyShader->setInternalCol(internal);

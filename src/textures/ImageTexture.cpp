@@ -46,3 +46,11 @@ Vector3D ImageTexture::getColour(const Vector2D& texCoord) const {
     return ERROR_COLOUR;
   }
 }
+
+TexturePtr ImageTexture::create(string filePath)
+  {
+  std::unique_ptr<mathernogl::Image> image = mathernogl::Image::load(filePath);
+  mathernogl::Image::ColourVector* colourMap = new mathernogl::Image::ColourVector;
+  image->readColourData(colourMap);
+  return TexturePtr(new ImageTexture(ColourMapPtr(colourMap), image->getWidth(), image->getHeight()));
+  }
