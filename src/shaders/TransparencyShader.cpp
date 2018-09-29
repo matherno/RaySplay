@@ -70,3 +70,8 @@ void TransparencyShader::setupScatterer()
   refractiveScatterer.reset(new LightScatterRefraction(refractionIndex));
   }
 
+Vector3D TransparencyShader::getSimplifiedSurfaceColour() const
+  {
+  return internalColour;
+  }
+

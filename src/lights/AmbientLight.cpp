@@ -27,3 +27,8 @@ bool AmbientLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef
   return true;
   }
 
+string AmbientLight::constructGLSLLightSurface() const
+  {
+  return "lightCol = " + glslVec3(colour) + ";";
+  }
+

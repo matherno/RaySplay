@@ -69,5 +69,16 @@ void PrimitivePlane::constructBoundingBox() {
   boundingBox = std::shared_ptr<BoundingBox>(new BoundingBox());
 }
 
-
+string PrimitivePlane::constructGLSLHitTest() const
+  {
+  return ""
+    "  vec3 point = " + glslVec3(point) + ";"
+    "  vec3 normal = " + glslVec3(normal) + ";"
+    "  float tValue = dot((point - rayOrigin), normal) / dot(rayDir, normal);\n"
+    "  if(tValue > EPSILON)"
+    "    {\n"
+    "    thisTValue = tValue;\n"
+    "    thisNormal = normal;"
+    "    }";
+  }
 

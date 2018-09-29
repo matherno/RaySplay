@@ -18,4 +18,5 @@ public:
   void setColour(float r, float g, float b);
 
   mathernogl::Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-};
+  virtual Vector3D getSimplifiedSurfaceColour() const override;
+  };

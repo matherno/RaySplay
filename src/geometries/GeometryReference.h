@@ -21,10 +21,12 @@ public:
   const mathernogl::Transform* getTransform() const { return &transform; };
   const mathernogl::Transform* getInvTransform() const { return &invTransform; };
   void setTransform(const mathernogl::Transform& transform);
+  virtual ShaderPtr getMaterial() const override;
 
   virtual bool init() override;
   virtual bool hitTest(const Ray* ray, double* hitTValue, SurfaceInfo* surfaceInfo) const override;
   virtual bool hitTest(const Ray* ray, double* hitTValue) const override;
   virtual void constructBoundingBox() override;
+  virtual string constructGLSLHitTest() const override;
 
-};
+  };

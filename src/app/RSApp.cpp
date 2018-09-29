@@ -7,19 +7,24 @@
 #include <wx/filepicker.h>
 #include <ImageOutputFile.h>
 #include <thread>
+#include <ImageOutputWindow.h>
 
 #define IMAGE_PANEL_SIZE wxSize(1366, 768)
 #define CONTROL_PANEL_SIZE wxSize(IMAGE_PANEL_SIZE.x, 60)
+
+#define WALKTHROUGH_FPS 30.0
 
 /*
  *  RSMainFrame
  */
 
 wxBEGIN_EVENT_TABLE(RSMainFrame, wxFrame)
+    EVT_TIMER(ID_UPDATETIMER, RSMainFrame::onUpdate)
     EVT_MENU(wxID_EXIT,  RSMainFrame::onExit)
     EVT_BUTTON(ID_RENDER,  RSMainFrame::onRender)
     EVT_BUTTON(ID_CANCEL,  RSMainFrame::onCancel)
     EVT_BUTTON(ID_SAVE,  RSMainFrame::onSave)
+    EVT_BUTTON(ID_WALKTHROUGH,  RSMainFrame::onStartWalkthrough)
 wxEND_EVENT_TABLE()
 
 RSMainFrame::RSMainFrame()
@@ -30,6 +35,8 @@ RSMainFrame::RSMainFrame()
   createControls();
   SetMinSize(GetSize());
   SetMaxSize(GetSize());
+  updateTimer.reset(new wxTimer(this, ID_UPDATETIMER));
+  updateTimer->Start(int(1000.0 / WALKTHROUGH_FPS));
   }
 
 void RSMainFrame::onExit(wxCommandEvent& event)
@@ -78,8 +85,10 @@ void RSMainFrame::createControls()
   controlPanelSizer->AddSpacer(10);
   controlPanelSizer->Add(new wxTextCtrl(sidePanel, ID_NUMTHREADS, "4", wxDefaultPosition, wxSize(40, -1)), 0, wxALIGN_CENTRE_VERTICAL);
 
-  controlPanelSizer->AddSpacer(250);
+  controlPanelSizer->AddSpacer(200);
   controlPanelSizer->Add(new wxButton(sidePanel, ID_SAVE, "Save Image"), 0, wxALIGN_CENTRE_VERTICAL);
+  controlPanelSizer->AddSpacer(20);
+  controlPanelSizer->Add(new wxButton(sidePanel, ID_WALKTHROUGH, "Walkthrough"), 0, wxALIGN_CENTRE_VERTICAL);
 
   sidePanel->SetSizer(controlPanelSizer);
   mainSizer->SetSizeHints(this);
@@ -90,10 +99,7 @@ void RSMainFrame::onRender(wxCommandEvent& event)
   if (rendering)
     return;
 
-  string inputFilePath = "";
-  wxFilePickerCtrl* inputFilePicker = dynamic_cast<wxFilePickerCtrl*>(FindWindowById(ID_INPUTFILE));
-  if (inputFilePicker)
-    inputFilePath = inputFilePicker->GetPath();
+  const string inputFilePath = getCurrentSceneFilePath();
 
   int numThreads = 4;
   wxTextCtrl* numThreadsCtrl = dynamic_cast<wxTextCtrl*>(FindWindowById(ID_NUMTHREADS));
@@ -217,6 +223,28 @@ void RSMainFrame::onSave(wxCommandEvent& event)
   SetStatusText("Saved render image to '" + imageFilePath + "'");
   }
 
+void RSMainFrame::onStartWalkthrough(wxCommandEvent& event)
+  {
+  walkthroughWindow.reset();
+  string filePath = getCurrentSceneFilePath();
+  if (!filePath.empty())
+    {
+    walkthroughWindow.reset(new RSWalkthroughWindow());
+    walkthroughWindow->startWalkthrough(filePath);
+    }
+  }
+
+void RSMainFrame::onUpdate(wxTimerEvent& event)
+  {
+  if (walkthroughWindow)
+    {
+    if(!walkthroughWindow->onUpdate())
+      {
+      walkthroughWindow.reset();
+      }
+    }
+  }
+
 
 /*
  * ImageOutput overrides
@@ -272,6 +300,15 @@ bool RSMainFrame::isRendering()
   bool res = rendering;
   renderingMutex.unlock();
   return res;
+  }
+
+string RSMainFrame::getCurrentSceneFilePath() const
+  {
+  string inputFilePath = "";
+  wxFilePickerCtrl* inputFilePicker = dynamic_cast<wxFilePickerCtrl*>(FindWindowById(ID_INPUTFILE));
+  if (inputFilePicker)
+    inputFilePath = inputFilePicker->GetPath();
+  return inputFilePath;
   }
 
 /*

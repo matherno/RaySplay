@@ -29,5 +29,6 @@ public:
 private:
   void setupScatterer();
   Vector3D calcRefractedLight(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef);
-  Vector3D calcReflectedLight(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef);
+public:
+  virtual Vector3D getSimplifiedSurfaceColour() const override;
   };

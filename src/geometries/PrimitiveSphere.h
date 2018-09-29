@@ -36,4 +36,6 @@ public:
 
 protected:
   void setupSurfaceSampler();
+public:
+  virtual string constructGLSLHitTest() const override;
   };

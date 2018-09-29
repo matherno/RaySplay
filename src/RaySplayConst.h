@@ -16,3 +16,8 @@ typedef mathernogl::Vector2D Vector2D;
 typedef std::string string;
 
 #define ERROR_COLOUR Vector3D(0.9, 0.0, 0.6)
+
+static string glslVec3(const Vector3D& value)
+  {
+  return mathernogl::stringFormat("vec3(%.5f, %.5f, %.5f)", value.x, value.y, value.z);
+  }

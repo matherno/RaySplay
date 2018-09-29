@@ -2,7 +2,9 @@
 
 #include <wx/wx.h>
 #include <ImageOutput.h>
+#include <ImageOutputWindow.h>
 #include "RSImagePanel.h"
+#include "RSWalkthroughWindow.h"
 
 enum RSControlID
   {
@@ -12,6 +14,8 @@ enum RSControlID
   ID_DRAFTBOOL,
   ID_SAVE,
   ID_NUMTHREADS,
+  ID_WALKTHROUGH,
+  ID_UPDATETIMER,
   };
 
 #define COLOUR_LIGHT_GREY   wxColor(160, 160, 160)
@@ -29,6 +33,8 @@ private:
   std::mutex renderingMutex;
   RSImagePanel* imagePanel = nullptr;
   string progressString = "";
+  std::unique_ptr<wxTimer> updateTimer;
+  std::unique_ptr<RSWalkthroughWindow> walkthroughWindow;
 
 public:
   RSMainFrame();
@@ -47,9 +53,13 @@ private:
   void onRender(wxCommandEvent& event);
   void onCancel(wxCommandEvent& event);
   void onSave(wxCommandEvent& event);
+  void onStartWalkthrough(wxCommandEvent& event);
+  void onUpdate(wxTimerEvent& event);
   void refreshImage();
   bool isRendering();
   void setRendering(bool rendering);
+
+  string getCurrentSceneFilePath() const;
 
   wxDECLARE_EVENT_TABLE();
   };

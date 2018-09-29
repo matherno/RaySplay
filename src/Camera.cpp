@@ -24,7 +24,7 @@ Vector3D Camera::getViewDirection() const {
 }
 
 void Camera::setViewDirection(const Vector3D& viewDirection) {
-  this->viewDirection = viewDirection;
+  this->viewDirection = viewDirection.getUniform();
   orthoBasisValid = false;
 }
 
@@ -33,7 +33,7 @@ Vector3D Camera::getViewUp() const {
 }
 
 void Camera::setViewUp(const Vector3D& viewUp) {
-  this->viewUp = viewUp;
+  this->viewUp = viewUp.getUniform();
   orthoBasisValid = false;
 }
 

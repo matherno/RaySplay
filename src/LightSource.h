@@ -28,6 +28,11 @@ public:
   //  lightIntensity wil be the intensity(colour) of the light at the given surface
   virtual bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection) = 0;
 
-
+  //  constructs a fragment shader code string that lights a surface given this light source
+  //  view direction (direction from surface to view) is stored in viewDir
+  //  surface position in surfacePos, surface normal in surfaceNormal
+  //  surface light colour to be stored in lightCol
+  //  direction to light from surface to be stored in lightDir
+  virtual string constructGLSLLightSurface() const { return ""; }
 };
 

@@ -27,4 +27,5 @@ public:
   virtual bool hitTest(const Ray* ray, double* hitTValue) const override;
   virtual void constructBoundingBox() override;
   virtual const BoundingBoxPtr getBoundingBox() const override;
-};
+  virtual string constructGLSLHitTest() const override;
+  };

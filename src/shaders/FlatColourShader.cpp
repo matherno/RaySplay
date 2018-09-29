@@ -23,3 +23,8 @@ void FlatColourShader::setColour(float r, float g, float b) {
 mathernogl::Vector3D FlatColourShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) {
   return colour;
 }
+
+Vector3D FlatColourShader::getSimplifiedSurfaceColour() const
+  {
+  return colour;
+  }

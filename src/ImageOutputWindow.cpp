@@ -29,7 +29,7 @@ void ImageOutputWindow::paintPixel(uint x, uint y, const Vector3D& colour)
   texture->bytes.get()[redIndex+1] = mathernogl::byte(colour.y * 255);
   texture->bytes.get()[redIndex+2] = mathernogl::byte(colour.z * 255);
 
-  if (x == 0 && y % 20 == 0)
+//  if (x == 0 && y % 20 == 0)
     updateWindow();
 
   fileOutput->paintPixel(x, y, colour);

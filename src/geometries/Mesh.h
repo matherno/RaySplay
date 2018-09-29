@@ -36,4 +36,5 @@ public:
   virtual const BoundingBoxPtr getBoundingBox() const override;
 
   virtual void constructBoundingBox() override;
-};
+  virtual string constructGLSLHitTest() const override;
+  };

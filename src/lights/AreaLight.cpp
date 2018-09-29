@@ -23,3 +23,16 @@ bool AreaLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* s
     }
   return false;
   }
+
+string AreaLight::constructGLSLLightSurface() const
+  {
+  Vector3D samplePos;
+  const int numSamples = 64;
+  for (int i = 0; i < numSamples; ++i)
+    {
+    Vector3D currentSamplePos, currentSampleNorm;
+    geometry->getSurfaceSample(&currentSamplePos, &currentSampleNorm);
+    samplePos += currentSamplePos;
+    }
+  return PointLight::constructGLSLLightSurface(Vector3D(samplePos.x / numSamples, samplePos.y / numSamples, samplePos.z / numSamples));
+  }

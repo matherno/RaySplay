@@ -27,7 +27,9 @@ public:
   void setFallOffExp(float exp) { this->falloffExp = exp; }
 
   virtual bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection) override;
+  virtual string constructGLSLLightSurface() const override;
 
 protected:
   bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, const Vector3D& lightPos, Vector3D* lightIntensity, Vector3D* lightDirection);
+  string constructGLSLLightSurface(const Vector3D& lightPos) const;
 };

@@ -37,6 +37,7 @@ public:
   //  set to use blinn-phong algorithm, rather than phong
   void setBlinnPhong(bool blinnPhong) { this->blinnPhong = blinnPhong; }
 
+  virtual Vector3D getSimplifiedSurfaceColour() const override;
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
 
 private:

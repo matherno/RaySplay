@@ -48,4 +48,6 @@ public:
   bool isPointWithinBounds(const Vector3D& point) const;
 
   void getCorners(std::vector<Vector3D>* corners) const;
+
+  string constructGLSLHitTest() const;
 };

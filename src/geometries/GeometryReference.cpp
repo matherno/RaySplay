@@ -67,3 +67,66 @@ void GeometryReference::constructBoundingBox() {
   for (Vector3D& corner : bbCorners)
     boundingBox->addPoint(transform.transform(corner));
 }
+
+string GeometryReference::constructGLSLHitTest() const
+  {
+  const mathernogl::Matrix4* invMatrix = invTransform.getTransformMatrix();
+  const string stringInvTransformMatrix = "mat4("
+                                 + std::to_string(invMatrix->getAt(0, 0)) + ", "
+                                 + std::to_string(invMatrix->getAt(1, 0)) + ", "
+                                 + std::to_string(invMatrix->getAt(2, 0)) + ", "
+                                 + std::to_string(invMatrix->getAt(3, 0)) + ", "
+                                 + std::to_string(invMatrix->getAt(0, 1)) + ", "
+                                 + std::to_string(invMatrix->getAt(1, 1)) + ", "
+                                 + std::to_string(invMatrix->getAt(2, 1)) + ", "
+                                 + std::to_string(invMatrix->getAt(3, 1)) + ", "
+                                 + std::to_string(invMatrix->getAt(0, 2)) + ", "
+                                 + std::to_string(invMatrix->getAt(1, 2)) + ", "
+                                 + std::to_string(invMatrix->getAt(2, 2)) + ", "
+                                 + std::to_string(invMatrix->getAt(3, 2)) + ", "
+                                 + std::to_string(invMatrix->getAt(0, 3)) + ", "
+                                 + std::to_string(invMatrix->getAt(1, 3)) + ", "
+                                 + std::to_string(invMatrix->getAt(2, 3)) + ", "
+                                 + std::to_string(invMatrix->getAt(3, 3)) + ")";
+
+  const mathernogl::Matrix4* matrix = invTransform.getTransformMatrix();
+  const string stringNormalTransformMatrix = "mat3("
+                                       + std::to_string(matrix->getAt(0, 0)) + ", "
+                                       + std::to_string(matrix->getAt(1, 0)) + ", "
+                                       + std::to_string(matrix->getAt(2, 0)) + ", "
+                                       + std::to_string(matrix->getAt(0, 1)) + ", "
+                                       + std::to_string(matrix->getAt(1, 1)) + ", "
+                                       + std::to_string(matrix->getAt(2, 1)) + ", "
+                                       + std::to_string(matrix->getAt(0, 2)) + ", "
+                                       + std::to_string(matrix->getAt(1, 2)) + ", "
+                                       + std::to_string(matrix->getAt(2, 2)) + ")";
+
+
+  string glsl = ""
+    "mat3 normalTransformMatrix = " + stringNormalTransformMatrix + ";"
+    "mat4 transformMatrixInv = " + stringInvTransformMatrix + ";"
+    "vec3 untransformedRayOrigin = rayOrigin;"
+    "vec3 untransformedRayDir = rayDir;"
+    ""
+    "vec3 rayEnd = (vec4(rayOrigin + rayDir, 1) * transformMatrixInv).xyz;"
+    "rayOrigin = (vec4(rayOrigin, 1) * transformMatrixInv).xyz;"
+    "rayDir = normalize(rayEnd - rayOrigin);"
+    "";
+
+  glsl += geometry->constructGLSLHitTest();
+
+  glsl += ""
+    ""
+    "thisTValue = thisTValue / length(rayEnd - rayOrigin);"
+    "thisNormal = normalize(thisNormal * normalTransformMatrix);"
+    ""
+    "rayOrigin = untransformedRayOrigin;"
+    "rayDir = untransformedRayDir;";
+
+  return glsl;
+  }
+
+ShaderPtr GeometryReference::getMaterial() const
+  {
+  return material ? material : geometry->getMaterial();
+  }

@@ -28,6 +28,7 @@ public:
   float getFuzziness() const { return fuzziness; }
 
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
+  virtual Vector3D getSimplifiedSurfaceColour() const override;
 
 private:
 

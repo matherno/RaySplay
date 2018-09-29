@@ -12,4 +12,6 @@
 class NormalsTestShader : public Shader {
 public:
   virtual Vector3D shadeSurface(const Ray* hitRay, const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef) override;
-};
+
+  virtual Vector3D getSimplifiedSurfaceColour() const override { return Vector3D(); }
+  };

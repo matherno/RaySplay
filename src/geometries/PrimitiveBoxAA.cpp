@@ -44,4 +44,7 @@ void PrimitiveBoxAA::constructBoundingBox() {
 
 }
 
-
+string PrimitiveBoxAA::constructGLSLHitTest() const
+  {
+  return boundingBox->constructGLSLHitTest();
+  }

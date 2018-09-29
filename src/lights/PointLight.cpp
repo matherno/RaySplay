@@ -61,3 +61,30 @@ bool PointLight::lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* 
   return true;
   }
 
+string PointLight::constructGLSLLightSurface() const
+  {
+  return constructGLSLLightSurface(position);
+  }
+
+string PointLight::constructGLSLLightSurface(const Vector3D& lightPos) const
+  {
+  return ""
+    "vec3 lightPos = " + glslVec3(lightPos) + ";"
+    "vec3 hitColour, hitNormal;"
+    "vec3 surfaceToLightDir = normalize(lightPos - surfacePos);"
+    "float tValue = hitTestScene(surfacePos, surfaceToLightDir, hitNormal, hitColour);"
+    "float lightTValue = (lightPos.x - surfacePos.x) / surfaceToLightDir.x;\n"
+    "if (tValue < 0 || tValue > lightTValue)"
+    "  {"
+    "  "
+    "  float lightDistance = length(lightPos - surfacePos);\n"
+    "  float lightAttenuation = 1.0 - (lightDistance / " + std::to_string(radius) + ");\n"
+    "  if (lightAttenuation >= 0 && lightAttenuation <= 1)"
+    "    {"
+    "    lightAttenuation = pow(lightAttenuation, " + std::to_string(falloffExp) + ");\n"
+    "    lightCol = " + glslVec3(colour) + " * lightAttenuation;"
+    "    lightDir = surfaceToLightDir;"
+    "    }"
+    "  }";
+  }
+

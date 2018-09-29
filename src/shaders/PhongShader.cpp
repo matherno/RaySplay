@@ -106,3 +106,8 @@ void PhongShader::setupScatterers()
   specularScatterer.reset(new LightScatterSpecular(specularExp));
   }
 
+Vector3D PhongShader::getSimplifiedSurfaceColour() const
+  {
+  return diffuseColour;
+  }
+

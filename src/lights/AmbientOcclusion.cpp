@@ -65,3 +65,8 @@ bool AmbientOcclusion::lightAtSurface(const SurfaceInfo* surfaceInfo, const Scen
     *lightIntensity = ambientColour * (1.0f - shadowIntensity);
   return true;
   }
+
+string AmbientOcclusion::constructGLSLLightSurface() const
+  {
+  return "lightCol = " + glslVec3(ambientColour) + ";";
+  }

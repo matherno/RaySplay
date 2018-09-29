@@ -24,7 +24,7 @@ public:
   Geometry() {};
   virtual ~Geometry() {};
 
-  ShaderPtr getMaterial() const { return material; }
+  virtual ShaderPtr getMaterial() const { return material; }
   void setMaterial(ShaderPtr material) { this->material = material; }
   virtual const BoundingBoxPtr getBoundingBox() const { return boundingBox; };
   void setCastShadows(bool shadows) { castsShadows = shadows; }
@@ -53,5 +53,12 @@ public:
 
   //  obtains a uniformly distributed random sample of this geometries surface
   virtual bool getSurfaceSample(Vector3D* position, Vector3D* normal) { ASSERT(false, "Not Implemented"); return false; }
+
+  //  constructs a fragment shader code string that hit tests this primitive
+  //  ray origin is stored in rayOrigin, ray direction in rayDir
+  //  hit t value is to be stored in [thisTValue]
+  //  hit surface normal in [thisNormal]
+  //  hit surface colour in [thisColour]
+  virtual string constructGLSLHitTest() const { return ""; };
 };
 

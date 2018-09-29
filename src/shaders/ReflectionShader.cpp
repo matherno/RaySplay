@@ -69,3 +69,7 @@ void ReflectionShader::setupScatterer()
     reflectiveScatterer.reset(new LightScatterPerfectSpecular());
   }
 
+Vector3D ReflectionShader::getSimplifiedSurfaceColour() const
+  {
+  return mirrorCol;
+  }

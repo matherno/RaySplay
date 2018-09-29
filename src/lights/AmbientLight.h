@@ -21,4 +21,5 @@ public:
   bool isAmbient() override { return true; };
 
   virtual bool lightAtSurface(const SurfaceInfo* surfaceInfo, const SceneDef* sceneDef, Vector3D* lightIntensity, Vector3D* lightDirection) override;
+  virtual string constructGLSLLightSurface() const override;
   };

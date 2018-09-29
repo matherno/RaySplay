@@ -119,4 +119,46 @@ void PrimitiveSphere::setupSurfaceSampler()
   samplerHelper.initialise(std::shared_ptr<SampleGenerator>(sampler), SampleGenerator::unitSphereMap);
   }
 
+string PrimitiveSphere::constructGLSLHitTest() const
+  {
+  Vector3D colour = material->getSimplifiedSurfaceColour();
+  string stringCentre = "vec3(" + std::to_string(centre.x) + ", " + std::to_string(centre.y) + ", " + std::to_string(centre.z) + ")";
+  string stringRadius = std::to_string(radius);
+
+  return ""
+    "  float radius = " + stringRadius + ";"
+    "  float radiusSquared = radius * radius;"
+    "  vec3 centre = " + stringCentre + ";"
+    "  vec3 originToCentre = rayOrigin - centre;\n"
+    "  float a = dot(rayDir, rayDir);\n"
+    "  float b = 2.0f * dot(originToCentre, rayDir);\n"
+    "  float c = dot(originToCentre, originToCentre) - radiusSquared;\n"
+    "  float discriminant = b*b - (4.0f*a*c);\n"
+    ""
+    "  if(discriminant > 0)"
+    "    {"
+    "    float sqrtPart = sqrt(discriminant);\n"
+    "    float denominator = 2*a;"
+    "    vec3 hitPosition;"
+    ""
+    "    float tValueResult = (-b - sqrtPart)/denominator;"
+    "    if(tValueResult > EPSILON)"
+    "      {"
+    "      hitPosition = rayOrigin + rayDir * tValueResult;"
+    "      thisNormal = normalize((hitPosition - centre) / radius);"
+    "      thisTValue = tValueResult;"
+    "      }"
+    "    else"
+    "      {"
+    "      tValueResult = (-b + sqrtPart)/denominator;\n"
+    "      if(tValueResult > EPSILON)"
+    "        {"
+    "        hitPosition = rayOrigin + rayDir * tValueResult;"
+    "        thisNormal = normalize((hitPosition - centre) / radius);"
+    "        thisTValue = tValueResult;"
+    "        }"
+    "      }"
+    "    }";
+  }
+
 

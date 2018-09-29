@@ -15,3 +15,8 @@ Vector3D EmissionShader::shadeSurface(const Ray* hitRay, const SurfaceInfo* surf
     return colour;
   return Vector3D();
   }
+
+Vector3D EmissionShader::getSimplifiedSurfaceColour() const
+  {
+  return colour;
+  }
